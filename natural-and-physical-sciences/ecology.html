@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ecology — News → Lessons</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --fg: #24211c;
+    --muted: #6b6558;
+    --accent: #8a5a3b;
+    --card-bg: #ffffff;
+    --border: #e4dfd4;
+    --link: #6b4226;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1a17;
+      --fg: #e9e4d8;
+      --muted: #a89f8c;
+      --accent: #d8a878;
+      --card-bg: #262320;
+      --border: #3a352c;
+      --link: #e0b389;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.6;
+  }
+  a { color: var(--link); }
+  header.site-header {
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 1.5rem;
+  }
+  header.site-header a.brand {
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: var(--fg);
+  }
+  nav.breadcrumb {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+  nav.breadcrumb a { color: var(--muted); }
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+  footer.site-footer {
+    text-align: center;
+    color: var(--muted);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.8rem;
+    padding: 2rem 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    align-items: stretch;
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+    margin: 1.5rem 0 0;
+  }
+  .grid > li {
+    display: flex;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    text-decoration: none;
+    color: var(--fg);
+  }
+  .card:hover { border-color: var(--accent); }
+  .card .card-title { font-weight: bold; }
+  .card .card-meta {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.35rem;
+  }
+  .lesson {
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 0;
+  }
+  .lesson:last-child { border-bottom: none; }
+  .lesson .lesson-meta {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 0.3rem 0 1rem;
+  }
+  .lesson .tag-primary { color: var(--accent); font-weight: 600; }
+  .lesson-body h3 { margin-top: 1.4rem; }
+  .lesson-body ul { padding-left: 1.3rem; }
+  .stub {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  .stub .stub-meta {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 0.3rem 0 0.6rem;
+  }
+  .empty-note { color: var(--muted); font-style: italic; }
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--fg);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  .back-button:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../index.html">News → Lessons</a>
+  
+<nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Natural &amp; Physical Sciences</a> / Ecology</nav>
+
+</header>
+<main>
+
+<a class="back-button" href="index.html">&larr; Back to Natural &amp; Physical Sciences</a>
+
+
+<h1>Ecology</h1>
+
+
+<article class="lesson" id="the-summer-of-outbreaks">
+  <h2>The Summer of Outbreaks</h2>
+  
+  <div class="stub">
+    <div class="stub-meta">
+      <span class="tag-primary">Public Health · Epidemiology</span>, Ecology
+      &middot; 2026/07/12 (KST)
+    </div>
+    <p>→ Full lesson: see <a href="../life-health-and-medicine/public-health-epidemiology.html">Public Health · Epidemiology</a></p>
+  </div>
+  
+</article>
+
+
+
+</main>
+<footer class="site-footer">
+  Generated from the News → Lessons library. Not affiliated with any linked publisher.
+</footer>
+</body>
+</html>

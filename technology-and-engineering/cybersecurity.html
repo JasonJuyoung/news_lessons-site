@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cybersecurity — News → Lessons</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --fg: #24211c;
+    --muted: #6b6558;
+    --accent: #8a5a3b;
+    --card-bg: #ffffff;
+    --border: #e4dfd4;
+    --link: #6b4226;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1a17;
+      --fg: #e9e4d8;
+      --muted: #a89f8c;
+      --accent: #d8a878;
+      --card-bg: #262320;
+      --border: #3a352c;
+      --link: #e0b389;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.6;
+  }
+  a { color: var(--link); }
+  header.site-header {
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 1.5rem;
+  }
+  header.site-header a.brand {
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: var(--fg);
+  }
+  nav.breadcrumb {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+  nav.breadcrumb a { color: var(--muted); }
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+  footer.site-footer {
+    text-align: center;
+    color: var(--muted);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.8rem;
+    padding: 2rem 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    align-items: stretch;
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+    margin: 1.5rem 0 0;
+  }
+  .grid > li {
+    display: flex;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    text-decoration: none;
+    color: var(--fg);
+  }
+  .card:hover { border-color: var(--accent); }
+  .card .card-title { font-weight: bold; }
+  .card .card-meta {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.35rem;
+  }
+  .lesson {
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 0;
+  }
+  .lesson:last-child { border-bottom: none; }
+  .lesson .lesson-meta {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 0.3rem 0 1rem;
+  }
+  .lesson .tag-primary { color: var(--accent); font-weight: 600; }
+  .lesson-body h3 { margin-top: 1.4rem; }
+  .lesson-body ul { padding-left: 1.3rem; }
+  .stub {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  .stub .stub-meta {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 0.3rem 0 0.6rem;
+  }
+  .empty-note { color: var(--muted); font-style: italic; }
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--fg);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  .back-button:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="../index.html">News → Lessons</a>
+  
+<nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Technology &amp; Engineering</a> / Cybersecurity</nav>
+
+</header>
+<main>
+
+<a class="back-button" href="index.html">&larr; Back to Technology &amp; Engineering</a>
+
+
+<h1>Cybersecurity</h1>
+
+
+<article class="lesson" id="patch-tuesday-and-the-escalating-arms-race-in-software-security">
+  <h2>Patch Tuesday and the Escalating Arms Race in Software Security</h2>
+  
+  <div class="lesson-meta">
+    <span class="tag-primary">Technology &amp; Engineering: Cybersecurity</span> · Secondary: Computer Science · Software
+    &middot; 2026/07/16 (KST)
+  </div>
+  <div class="lesson-body">
+    <h3>Summary</h3>
+<p>Microsoft's latest monthly security update, known as Patch Tuesday, addressed a record number of vulnerabilities, a volume the company attributed partly to its expanded use of AI in vulnerability discovery. The rollout was complicated when Microsoft had to halt distribution of the update for some Dell devices after reports of unexpected shutdowns and overheating. Shortly after the patches were released, a security researcher published proof-of-concept code for a new Windows zero-day vulnerability, underscoring how quickly attackers can move once flaws become public. Separately, researchers revealed that a bypass of Microsoft's Secure Boot protection had existed undetected for roughly a decade, and government agencies including CISA issued urgent warnings about actively exploited flaws in Microsoft SharePoint, highlighting the breadth and persistence of vulnerabilities across the company's ecosystem.</p>
+<h3>Key definitions</h3>
+<ul>
+<li><strong>Patch Tuesday</strong> — Microsoft's regularly scheduled monthly release of software updates that fix security vulnerabilities and other bugs across its operating systems and applications.</li>
+<li><strong>Zero-day vulnerability</strong> — A security flaw that is unknown to the software vendor or unpatched at the time it becomes known or exploited, leaving no advance opportunity for defense.</li>
+<li><strong>Proof-of-concept (PoC) exploit</strong> — Demonstration code created to show that a vulnerability can be practically exploited, often published by researchers to prove risk, but which can also be repurposed by attackers.</li>
+<li><strong>Secure Boot</strong> — A security standard that verifies a computer's firmware and operating system components have not been tampered with before the system boots, intended to block malware that loads early in the startup process.</li>
+<li><strong>Known Exploited Vulnerabilities (KEV) catalog</strong> — A list maintained by the U.S. Cybersecurity and Infrastructure Security Agency (CISA) of vulnerabilities confirmed to be actively exploited, used to prioritize urgent patching by government and private organizations.</li>
+</ul>
+<h3>Explanation</h3>
+<p>Patch Tuesday represents the routinized backbone of enterprise security maintenance, but the events surrounding this release illustrate how that routine has become increasingly strained. A record volume of patches signals both the growing complexity of modern software and the double-edged role of AI: the same automated techniques that help vendors discover flaws faster are also being used by researchers and attackers to find new ones at an accelerating pace. When Microsoft had to pause the update for certain Dell hardware due to stability problems, it demonstrated a recurring tension in patch management, where fixing one class of vulnerability can inadvertently introduce compatibility or reliability issues elsewhere, forcing vendors to balance speed against safety.</p>
+<p>The rapid emergence of a proof-of-concept exploit for a new zero-day immediately after the patch cycle reflects the compressed timeline defenders now face: vulnerability disclosure and exploit development often happen in parallel rather than in sequence, shrinking the window organizations have to apply fixes before attacks begin. The decade-long persistence of the Secure Boot bypass is a more structural lesson, showing that even foundational, trusted security mechanisms can harbor undetected weaknesses for extended periods, especially in complex systems that are rarely fully re-audited after initial deployment. Combined with CISA's warning about actively exploited SharePoint flaws, this cluster of events illustrates why cybersecurity is best understood not as a solved problem addressed by periodic updates, but as a continuous, adversarial process in which defenders and attackers are locked in an ongoing cycle of discovery, exploitation, and remediation.</p>
+<h3>Further reading</h3>
+<ul>
+<li>NIST Cybersecurity Framework</li>
+<li>CISA's Known Exploited Vulnerabilities (KEV) Catalog documentation</li>
+<li>'The Art of Software Security Assessment' by Mark Dowd, John McDonald, and Justin Schuh</li>
+</ul>
+<h3>Sources</h3>
+<ul>
+<li><a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxQWUJmTW13VnlzSXpzTHF6RmlFXzhKdU14VlZYY0hIMEhSSWRxZC1Ta2tnNmRwWV9HT1B1X09memFINERMRldjNG4wTUtuaDBmWW5xdVJGRmhuckY2WHVac3pjM1JCcFBWYndDbGNTcWJ5bzdiVzhHNTRSMlplQlJrNDdLU2VyYmo4WEl1bF9jMUVuQll4TjBlWUNlOUJpTXlJR29JczUzUk5RQXRIVS1qR3RiZnl2QQ?oc=5">TechCrunch — Microsoft patches record number of security vulnerabilities, citing its use of AI</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMi6wFBVV95cUxOYnF1cXZpekx4RzhYQm11MFlmOE1fN2lhY3B3WUItUFZrSHAwdGEzdTItU2FUZnU1emlXT09yemN4TTRYTWZCUWVFR0JWTEwzb2drSEUxOXhYT3JkUVJ3S1FfTlZzS3dYQWJUaDVhSGhwMVJSdGRCODM1TERvaUtvcHRqVTZ3QmhJTUFUNVpQbk9URXFQMXV2TFl6WEhwMlZ3Z1FJMGFMbHg2cUlwZERJZ0VsVlJjZUFBTEhBNmNOOV82Ynh4bjRhNm1SQkJSTVZRcVVoeEhkUXlHSkhURzRsdENGZmViSG1ycUFV?oc=5">The Register — Microsoft cancels Patch Tuesday for some Dell users over surprise shutdowns, overheating devices</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMiggFBVV95cUxQMlhDZ2tUYjNFNUNPcU1kOUI5UjhVTlJUbEFPNllPYnpxVkprUXl2ZWVVV0ZPNjZvckZPdmZJazNVQ3EwT2NxVlBYcko3Qk51RDRfQzhlS3VqdzZEOTU0ZUg3NlZUaGtnQWwzbGZtSThfLUoybWRiYWt2QWVoUHFRUFdn?oc=5">The Hacker News — Researcher Drops New Windows Zero-Day PoC Hours After Microsoft Patch Tuesday</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxQbDdNWDRqSzRtV1JidlFxOWU2Yi15SXU0bnB4UHMwZ1hNenBJZXlGU2VDSnBOWWpBeGl4SUpIRHpEOGVFajRWRW83UF9SSFBSeGZ2LTZwM2t2Nmk2MExadHhoNnA5UHAzQmMyTF9ZNnlBUi1tOG5ZbEJ1eWxvblJiSExJa2R4TkFaQmlpTE14Nkhnc2JSS0FHelhKRmdURm03eHl6TWw2N2w?oc=5">Ars Technica — Microsoft's Secure Boot has been broken for a decade and no one noticed until now</a></li>
+</ul>
+  </div>
+  
+</article>
+
+
+
+</main>
+<footer class="site-footer">
+  Generated from the News → Lessons library. Not affiliated with any linked publisher.
+</footer>
+</body>
+</html>
