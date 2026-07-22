@@ -13,6 +13,11 @@
     --card-bg: #ffffff;
     --border: #e4dfd4;
     --link: #6b4226;
+    --hover-border: #d0cabc;
+    --hover-bg: #f8f6f1;
+    --accent-fill: #f8f0e8;
+    --accent-glow: rgba(138, 90, 59, 0.08);
+    --footer-height: 48px;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -23,8 +28,15 @@
       --card-bg: #262320;
       --border: #3a352c;
       --link: #e0b389;
+      /* Not specified in the design handoff (light-only prototype) — chosen to sit
+         between --card-bg and --border, consistent with the light-mode relationship. */
+      --hover-border: #4a443a;
+      --hover-bg: #2e2a25;
+      --accent-fill: #332a20;
+      --accent-glow: rgba(216, 168, 120, 0.15);
     }
   }
+  [hidden] { display: none !important; }
   * { box-sizing: border-box; }
   body {
     margin: 0;
@@ -32,36 +44,110 @@
     color: var(--fg);
     font-family: Georgia, "Times New Roman", serif;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
   a { color: var(--link); }
   header.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     border-bottom: 1px solid var(--border);
-    padding: 1.25rem 1.5rem;
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 30;
   }
   header.site-header a.brand {
-    font-size: 1.3rem;
+    font-size: 1.0625rem;
     font-weight: bold;
     text-decoration: none;
     color: var(--fg);
+  }
+  nav.site-nav {
+    display: flex;
+    gap: 26px;
+  }
+  nav.site-nav a {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.8125rem;
+    text-decoration: none;
+    color: var(--muted);
+  }
+  nav.site-nav a.is-active, nav.site-nav a:hover { color: var(--accent); }
+  .site-nav-dropdown { position: relative; display: flex; align-items: center; }
+  .site-nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    /* padding-top (not margin-top) so the gap between "Explore" and the box
+       below is still part of this element's hoverable area — a margin-top
+       gap is dead space the mouse has to cross, which drops :hover and
+       closes the menu before the pointer reaches it. */
+    padding-top: 10px;
+    z-index: 10;
+  }
+  .site-nav-dropdown:hover .site-nav-dropdown-menu,
+  .site-nav-dropdown:focus-within .site-nav-dropdown-menu {
+    display: block;
+  }
+  .site-nav-dropdown-menu-box {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px;
+    min-width: 90px;
+  }
+  .site-nav-dropdown-menu-box a {
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+  .site-nav-dropdown-menu-box a:hover { background: var(--hover-bg); }
+  .content-wrap {
+    flex: 1 0 auto;
+    /* An explicit positioning context for .switch-view-button's docked state —
+       this element's bottom edge always coincides with the footer's top edge
+       (footer is its very next sibling, no gap), so anchoring to it directly
+       is exact regardless of page length. Deliberately not relying on the
+       "no positioned ancestor" fallback (the initial containing block),
+       which doesn't reliably extend to a long page's true bottom. */
+    position: relative;
+  }
+  .page-shell {
+    display: flex;
+    align-items: flex-start;
   }
   nav.breadcrumb {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 0.85rem;
     color: var(--muted);
-    margin-top: 0.4rem;
+    margin: 1.5rem 1.5rem 0;
   }
   nav.breadcrumb a { color: var(--muted); }
+  .page-main { flex: 1; min-width: 0; }
   main {
     max-width: 780px;
     margin: 0 auto;
     padding: 2rem 1.5rem 4rem;
   }
   footer.site-footer {
+    flex-shrink: 0;
+    height: var(--footer-height);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     color: var(--muted);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 0.8rem;
-    padding: 2rem 1.5rem;
+    padding: 0 1.5rem;
     border-top: 1px solid var(--border);
   }
   h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; }
@@ -99,6 +185,12 @@
     margin-top: 0.35rem;
   }
   .lesson {
+    /* Every incoming anchor link to a lesson — a stub's "see [tag]" link,
+       History's rows, Home's latest-lessons list — targets this element's
+       id. Without this, the sticky header (position:sticky; top:0) covers
+       whatever the browser scrolls to, since native fragment-scrolling lands
+       the target flush with the viewport top. */
+    scroll-margin-top: var(--header-height, 58px);
     border-bottom: 1px solid var(--border);
     padding: 1.5rem 0;
   }
@@ -109,6 +201,7 @@
     color: var(--muted);
     margin: 0.3rem 0 1rem;
   }
+  .lesson .lesson-meta > div { line-height: 1.5; }
   .lesson .tag-primary { color: var(--accent); font-weight: 600; }
   .lesson-body h3 { margin-top: 1.4rem; }
   .lesson-body ul { padding-left: 1.3rem; }
@@ -120,6 +213,7 @@
     color: var(--muted);
     margin: 0.3rem 0 0.6rem;
   }
+  .stub .stub-meta > div { line-height: 1.5; }
   .empty-note { color: var(--muted); font-style: italic; }
   .back-button {
     display: inline-flex;
@@ -137,82 +231,456 @@
     margin-bottom: 1.5rem;
   }
   .back-button:hover { border-color: var(--accent); color: var(--accent); }
+  .back-button:not([hidden]) + .back-button { margin-left: 0.6rem; }
+
+  .sidebar {
+    flex: none;
+    width: 220px;
+    border-right: 1px solid var(--border);
+    padding: 16px 14px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.8125rem;
+    /* --header-height is measured and set precisely by JS (see the shared
+       script near the end of body) rather than guessed here — a wrong
+       hardcoded value would either gap below the header or hide behind it. */
+    position: sticky;
+    top: var(--header-height, 58px);
+  }
+  .sidebar[data-open="false"] {
+    width: 28px;
+    padding: 16px 0;
+  }
+  .sidebar-collapsed-toggle {
+    display: none;
+    writing-mode: vertical-rl;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 0;
+  }
+  .sidebar[data-open="false"] .sidebar-collapsed-toggle { display: block; }
+  .sidebar[data-open="false"] .sidebar-panel { display: none; }
+  .sidebar-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 1.5rem;
+  }
+  .sidebar-back, .sidebar-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .sidebar-back:hover, .sidebar-close:hover { color: var(--accent); }
+  .sidebar-list-viewport {
+    max-height: 520px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 8px;
+    position: relative;
+  }
+  .sidebar-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-tag-list { padding-left: 14px; }
+  .sidebar-row {
+    display: block;
+    /* Explicit width, not just width:auto — a <button> (cluster rows) doesn't
+       auto-stretch to fill its container the way an <a> (tag rows) does, even
+       with display:block set, so leaving width unset made cluster rows'
+       hover boxes size to their text while tag rows filled the container.
+       calc(100% - 6px) accounts for the 3px left/right margins below exactly,
+       so this still doesn't reintroduce the overflow/clipping bug those
+       margins caused when this was width:100% outright. */
+    width: calc(100% - 6px);
+    text-align: left;
+    background: none;
+    border: none;
+    text-decoration: none;
+    color: var(--fg);
+    font-family: inherit;
+    font-size: inherit;
+    padding: 6px 8px;
+    margin: 0 3px 6px 3px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .sidebar-row:hover { box-shadow: 0 0 0 1px var(--hover-border); }
+  .sidebar-row.is-current { color: var(--accent); background: var(--hover-bg); }
+  .sidebar-anim-out {
+    transition: transform 180ms ease, opacity 180ms ease;
+    transform: translateX(-14px);
+    opacity: 0;
+  }
+  .sidebar-anim-in-start {
+    transition: none;
+    transform: translateX(14px);
+    opacity: 0;
+  }
+  .sidebar-anim-in {
+    transition: transform 180ms ease, opacity 180ms ease;
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .explore-caption {
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  .explore-back { text-align: center; margin: 0 0 10px; }
+  .explore-back button {
+    background: none;
+    border: none;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.9rem;
+    color: var(--accent);
+    cursor: pointer;
+    padding: 0;
+  }
+  .explore-map {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .explore-map-panel {
+    position: relative;
+    flex: none;
+  }
+  .explore-bubble {
+    position: absolute;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    font: 600 13px Georgia, "Times New Roman", serif;
+    color: var(--fg);
+    text-align: center;
+    line-height: 1.2;
+    padding: 8px;
+  }
+  .explore-cluster-bubble, .explore-tag-bubble {
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .explore-cluster-bubble:hover, .explore-tag-bubble:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .explore-center-root {
+    border: 1px dashed var(--hover-border);
+    background: var(--bg);
+    color: var(--muted);
+    font: 600 15px Georgia, "Times New Roman", serif;
+    line-height: 1.2;
+  }
+  .explore-center-cluster {
+    border: 2px solid var(--accent);
+    background: var(--accent-fill);
+    color: var(--accent);
+    font: 700 15px Georgia, "Times New Roman", serif;
+    padding: 8px;
+    box-shadow: 0 0 0 4px var(--accent-glow);
+  }
+  .explore-anim-out {
+    transition: transform 200ms ease, opacity 200ms ease, filter 200ms ease;
+    transform: scale(1.06);
+    opacity: 0;
+    filter: blur(4px);
+  }
+  .explore-anim-in-start {
+    transition: none;
+    transform: scale(0.92);
+    opacity: 0;
+    filter: blur(4px);
+  }
+  .explore-anim-in {
+    transition: transform 200ms ease, opacity 200ms ease, filter 200ms ease;
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  .history-section-label {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+  .lesson-list {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2px 16px;
+    margin-bottom: 22px;
+  }
+  .lesson-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--fg);
+  }
+  .lesson-row:hover { color: var(--accent); }
+  .lesson-row-title { font-size: 0.84375rem; }
+  .lesson-row-cluster {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.6875rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .lesson-list .lesson-row { padding: 11px 0; border-bottom: 1px dotted var(--border); }
+  .lesson-list .lesson-row:last-child { border-bottom: none; }
+  .history-day {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .history-day-header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--fg);
+  }
+  .history-day-header.is-expanded { background: var(--hover-bg); }
+  .history-day-date { font-size: 0.8125rem; font-weight: 700; }
+  .history-day-count {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.6875rem;
+    color: var(--muted);
+  }
+  .history-day-body { padding: 4px 16px; }
+  .history-day-body .lesson-row { padding: 9px 0; border-bottom: 1px dotted var(--border); }
+  .history-day-body .lesson-row:last-child { border-bottom: none; }
+
+  .pill-button {
+    display: inline-block;
+    padding: 11px 28px;
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    color: var(--accent);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.8125rem;
+    text-decoration: none;
+    margin-bottom: 24px;
+  }
+  .pill-button:hover { background: var(--accent-fill); }
+  .pill-button-block {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    text-align: center;
+    margin-top: 16px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .pill-button-block:hover { border-color: var(--accent); color: var(--accent); }
+  .switch-view-button {
+    position: fixed;
+    bottom: 20px;
+    right: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--fg);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.6rem 1.1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    z-index: 20;
+  }
+  .switch-view-button:hover { border-color: var(--accent); color: var(--accent); }
+  /* Docked state, toggled by IntersectionObserver once the footer scrolls into
+     view: switches from tracking the viewport to being anchored inside
+     .content-wrap (bottom:20px from *its* edge, which is the footer's top
+     edge by construction) — so it scrolls with the page from then on, always
+     exactly 20px above the footer regardless of page length. */
+  .switch-view-button.is-docked {
+    position: absolute;
+    bottom: 20px;
+  }
+  .latest-update-label {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.6875rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .glossary-subtitle {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.71875rem;
+    color: var(--muted);
+    margin: 0 0 16px;
+  }
+  .glossary-az {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.71875rem;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+  }
+  .glossary-az .is-active { color: var(--accent); font-weight: 600; }
+  .glossary-letter {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .glossary-term { margin-bottom: 16px; }
+  .glossary-term-name { font-size: 0.875rem; font-weight: 700; color: var(--fg); }
+  .glossary-term-definition {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--muted);
+  }
+  .glossary-term-lesson {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.6875rem;
+    color: var(--accent);
+    margin-top: 3px;
+    text-decoration: none;
+  }
+  .glossary-term-lesson:hover { text-decoration: underline; }
+
 </style>
 </head>
-<body>
+<body class="">
 <header class="site-header">
   <a class="brand" href="../index.html">News → Lessons</a>
-  
-<nav class="breadcrumb"><a href="../index.html">Home</a> / Social Sciences &amp; Governance</nav>
-
+  <nav class="site-nav">
+    <div class="site-nav-dropdown">
+      <a href="../explore.html" class="is-active">Explore</a>
+      <div class="site-nav-dropdown-menu">
+        <div class="site-nav-dropdown-menu-box">
+          <a href="../explore.html" class="">Map</a>
+          <a href="../explore-cards.html" class="is-active">Cards</a>
+        </div>
+      </div>
+    </div>
+    <a href="../history.html" class="">History</a>
+    <a href="../glossary.html" class="">Glossary</a>
+  </nav>
 </header>
-<main>
+<div class="content-wrap">
+  <div class="page-shell">
+    
+    <div class="page-main">
+      
+<nav class="breadcrumb"><a href="../explore-cards.html">Explore</a> / Social Sciences &amp; Governance</nav>
 
-<a class="back-button" href="../index.html">&larr; Back to Home</a>
+      <main>
+      
+<a class="back-button" href="../explore-cards.html">&larr; Back to Explore (Cards)</a>
 
-
+      
 <h1>Social Sciences &amp; Governance</h1>
 
 <ul class="grid">
 
   <li>
-    <a class="card" href="demography.html">
+    <a class="card" href="demography.html?from=explore-cards">
       <div class="card-title">Demography</div>
       <div class="card-meta">no lessons yet</div>
     </a>
   </li>
 
   <li>
-    <a class="card" href="diplomacy.html">
+    <a class="card" href="diplomacy.html?from=explore-cards">
       <div class="card-title">Diplomacy</div>
       <div class="card-meta">1 stub</div>
     </a>
   </li>
 
   <li>
-    <a class="card" href="economics-macro-micro.html">
+    <a class="card" href="economics-macro-micro.html?from=explore-cards">
       <div class="card-title">Economics (Macro · Micro)</div>
       <div class="card-meta">2 lessons and 2 stubs</div>
     </a>
   </li>
 
   <li>
-    <a class="card" href="education-systems.html">
+    <a class="card" href="education-systems.html?from=explore-cards">
       <div class="card-title">Education Systems</div>
       <div class="card-meta">no lessons yet</div>
     </a>
   </li>
 
   <li>
-    <a class="card" href="geopolitics-international-relations.html">
+    <a class="card" href="geopolitics-international-relations.html?from=explore-cards">
       <div class="card-title">Geopolitics · International Relations</div>
       <div class="card-meta">1 lesson and 6 stubs</div>
     </a>
   </li>
 
   <li>
-    <a class="card" href="law-legal-systems.html">
+    <a class="card" href="law-legal-systems.html?from=explore-cards">
       <div class="card-title">Law · Legal Systems</div>
       <div class="card-meta">2 stubs</div>
     </a>
   </li>
 
   <li>
-    <a class="card" href="politics-political-science.html">
+    <a class="card" href="politics-political-science.html?from=explore-cards">
       <div class="card-title">Politics · Political Science</div>
       <div class="card-meta">8 lessons and 1 stub</div>
     </a>
   </li>
 
   <li>
-    <a class="card" href="public-policy-and-governance.html">
+    <a class="card" href="public-policy-and-governance.html?from=explore-cards">
       <div class="card-title">Public Policy &amp; Governance</div>
       <div class="card-meta">1 lesson and 4 stubs</div>
     </a>
   </li>
 
   <li>
-    <a class="card" href="sociology-anthropology.html">
+    <a class="card" href="sociology-anthropology.html?from=explore-cards">
       <div class="card-title">Sociology · Anthropology</div>
       <div class="card-meta">1 stub</div>
     </a>
@@ -221,9 +689,42 @@
 </ul>
 
 
-</main>
+      </main>
+    </div>
+  </div>
+  
+<a class="switch-view-button" href="../explore.html#social-sciences-and-governance">Switch to Map</a>
+
+</div>
 <footer class="site-footer">
   Generated from the News → Lessons library. Not affiliated with any linked publisher.
 </footer>
+<script>
+(function () {
+  var btn = document.querySelector('.switch-view-button');
+  var footer = document.querySelector('footer.site-footer');
+  if (!btn || !footer || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    btn.classList.toggle('is-docked', entries[0].isIntersecting);
+  }).observe(footer);
+})();
+(function () {
+  // Measured, not guessed — the sidebar's sticky "top" offset has to match
+  // the header's real rendered height exactly, or it either gaps below the
+  // header or hides underneath it.
+  var header = document.querySelector('header.site-header');
+  if (!header) return;
+  function setHeaderHeight() {
+    document.documentElement.style.setProperty('--header-height', header.offsetHeight + 'px');
+  }
+  setHeaderHeight();
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(setHeaderHeight).observe(header);
+  } else {
+    window.addEventListener('resize', setHeaderHeight);
+  }
+})();
+</script>
+
 </body>
 </html>

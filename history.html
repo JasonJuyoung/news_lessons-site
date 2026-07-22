@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>News → Lessons</title>
+<title>History — News → Lessons</title>
 <style>
   :root {
     --bg: #fbfaf7;
@@ -588,11 +588,12 @@
   }
   .glossary-term-lesson:hover { text-decoration: underline; }
 
-  .home-page main { max-width: 560px; }
+  .history-page main { max-width: 820px; }
+  .history-page h1 { font-size: 1.375rem; margin: 0 0 1.1rem; }
 
 </style>
 </head>
-<body class="home-page">
+<body class="history-page">
 <header class="site-header">
   <a class="brand" href="index.html">News → Lessons</a>
   <nav class="site-nav">
@@ -605,331 +606,21 @@
         </div>
       </div>
     </div>
-    <a href="history.html" class="">History</a>
+    <a href="history.html" class="is-active">History</a>
     <a href="glossary.html" class="">Glossary</a>
   </nav>
 </header>
 <div class="content-wrap">
   <div class="page-shell">
-    <aside class="sidebar" id="sidebar" data-open="true">
-  <button type="button" class="sidebar-collapsed-toggle" id="sidebarCollapsedToggle" aria-label="Open clusters">&equiv; Clusters</button>
-  <div class="sidebar-panel" id="sidebarPanel">
-    <div class="sidebar-panel-header">
-      <button type="button" class="sidebar-back" id="sidebarBack" hidden>&larr; <span id="sidebarBackLabel"></span></button>
-      <button type="button" class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">&times;</button>
-    </div>
-    <div class="sidebar-list-viewport" id="sidebarViewport">
-      <ul class="sidebar-list" id="sidebarClusterList" data-panel="clusters">
-        
-        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="business-and-finance" data-cluster-name="Business &amp; Finance">Business &amp; Finance</button></li>
-        
-        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="culture-and-humanities" data-cluster-name="Culture &amp; Humanities">Culture &amp; Humanities</button></li>
-        
-        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="entertainment-and-pop-culture" data-cluster-name="Entertainment &amp; Pop Culture">Entertainment &amp; Pop Culture</button></li>
-        
-        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="everyday-life-and-consumer" data-cluster-name="Everyday Life &amp; Consumer">Everyday Life &amp; Consumer</button></li>
-        
-        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="history" data-cluster-name="History">History</button></li>
-        
-        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="infrastructure-and-movement" data-cluster-name="Infrastructure &amp; Movement">Infrastructure &amp; Movement</button></li>
-        
-        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="life-health-and-medicine" data-cluster-name="Life, Health &amp; Medicine">Life, Health &amp; Medicine</button></li>
-        
-        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="natural-and-physical-sciences" data-cluster-name="Natural &amp; Physical Sciences">Natural &amp; Physical Sciences</button></li>
-        
-        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="security-conflict-and-public-safety" data-cluster-name="Security, Conflict &amp; Public Safety">Security, Conflict &amp; Public Safety</button></li>
-        
-        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="social-sciences-and-governance" data-cluster-name="Social Sciences &amp; Governance">Social Sciences &amp; Governance</button></li>
-        
-        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="sports-and-recreation" data-cluster-name="Sports &amp; Recreation">Sports &amp; Recreation</button></li>
-        
-        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="technology-and-engineering" data-cluster-name="Technology &amp; Engineering">Technology &amp; Engineering</button></li>
-        
-      </ul>
-      
-      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="business-and-finance" hidden>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="business-and-finance/business-strategy-management.html">Business Strategy · Management</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="business-and-finance/corporate-governance.html">Corporate Governance</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="business-and-finance/finance-markets.html">Finance · Markets</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="business-and-finance/trade-and-global-supply-chains.html">Trade &amp; Global Supply Chains</a></li>
-        
-      </ul>
-      
-      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="culture-and-humanities" hidden>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="culture-and-humanities/art-art-history.html">Art · Art History</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="culture-and-humanities/bioethics.html">Bioethics</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="culture-and-humanities/culture-cultural-studies.html">Culture · Cultural Studies</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="culture-and-humanities/linguistics.html">Linguistics</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="culture-and-humanities/literature.html">Literature</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="culture-and-humanities/media-studies-journalism.html">Media Studies · Journalism</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="culture-and-humanities/philosophy-ethics.html">Philosophy · Ethics</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="culture-and-humanities/religion-theology.html">Religion · Theology</a></li>
-        
-      </ul>
-      
-      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="entertainment-and-pop-culture" hidden>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="entertainment-and-pop-culture/celebrity-culture-fame-studies.html">Celebrity Culture · Fame Studies</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="entertainment-and-pop-culture/fashion.html">Fashion</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="entertainment-and-pop-culture/film-tv-streaming-industry.html">Film · TV · Streaming Industry</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="entertainment-and-pop-culture/gaming-esports.html">Gaming · Esports</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="entertainment-and-pop-culture/music-industry.html">Music Industry</a></li>
-        
-      </ul>
-      
-      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="everyday-life-and-consumer" hidden>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="everyday-life-and-consumer/consumer-affairs-product-safety.html">Consumer Affairs · Product Safety</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="everyday-life-and-consumer/family-and-relationships-human-interest.html">Family &amp; Relationships · Human Interest</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="everyday-life-and-consumer/food-and-culinary-science.html">Food &amp; Culinary Science</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="everyday-life-and-consumer/personal-finance.html">Personal Finance</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="everyday-life-and-consumer/real-estate-housing-markets.html">Real Estate · Housing Markets</a></li>
-        
-      </ul>
-      
-      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="history" hidden>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="history/constitutional-legal-history.html">Constitutional · Legal History</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="history/economic-history.html">Economic History</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="history/military-history.html">Military History</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="history/social-cultural-history.html">Social · Cultural History</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="history/world-history.html">World History</a></li>
-        
-      </ul>
-      
-      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="infrastructure-and-movement" hidden>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="infrastructure-and-movement/agriculture-food-systems.html">Agriculture · Food Systems</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="infrastructure-and-movement/labor-economics-workplace-trends.html">Labor Economics · Workplace Trends</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="infrastructure-and-movement/transportation-systems.html">Transportation Systems</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="infrastructure-and-movement/urban-planning.html">Urban Planning</a></li>
-        
-      </ul>
-      
-      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="life-health-and-medicine" hidden>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="life-health-and-medicine/medicine-clinical-science.html">Medicine · Clinical Science</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="life-health-and-medicine/nutrition.html">Nutrition</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="life-health-and-medicine/psychology-neuroscience.html">Psychology · Neuroscience</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="life-health-and-medicine/public-health-epidemiology.html">Public Health · Epidemiology</a></li>
-        
-      </ul>
-      
-      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="natural-and-physical-sciences" hidden>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="natural-and-physical-sciences/astronomy-astrophysics.html">Astronomy · Astrophysics</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="natural-and-physical-sciences/biology.html">Biology</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="natural-and-physical-sciences/chemistry.html">Chemistry</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="natural-and-physical-sciences/climate-science-environmental-science.html">Climate Science · Environmental Science</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="natural-and-physical-sciences/earth-science-geology.html">Earth Science · Geology</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="natural-and-physical-sciences/ecology.html">Ecology</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="natural-and-physical-sciences/geography-physical-and-human.html">Geography (Physical &amp; Human)</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="natural-and-physical-sciences/mathematics.html">Mathematics</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="natural-and-physical-sciences/physics.html">Physics</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="natural-and-physical-sciences/planetary-science.html">Planetary Science</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="natural-and-physical-sciences/wildlife-conservation-biology.html">Wildlife · Conservation Biology</a></li>
-        
-      </ul>
-      
-      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="security-conflict-and-public-safety" hidden>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="security-conflict-and-public-safety/criminal-justice-policing.html">Criminal Justice · Policing</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="security-conflict-and-public-safety/emergency-management-disaster-response.html">Emergency Management · Disaster Response</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="security-conflict-and-public-safety/human-rights.html">Human Rights</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="security-conflict-and-public-safety/immigration-and-migration-studies.html">Immigration &amp; Migration Studies</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="security-conflict-and-public-safety/terrorism-extremism-studies.html">Terrorism · Extremism Studies</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="security-conflict-and-public-safety/war-armed-conflict-studies.html">War · Armed Conflict Studies</a></li>
-        
-      </ul>
-      
-      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="social-sciences-and-governance" hidden>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="social-sciences-and-governance/demography.html">Demography</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="social-sciences-and-governance/diplomacy.html">Diplomacy</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="social-sciences-and-governance/economics-macro-micro.html">Economics (Macro · Micro)</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="social-sciences-and-governance/education-systems.html">Education Systems</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="social-sciences-and-governance/geopolitics-international-relations.html">Geopolitics · International Relations</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="social-sciences-and-governance/law-legal-systems.html">Law · Legal Systems</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="social-sciences-and-governance/politics-political-science.html">Politics · Political Science</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="social-sciences-and-governance/public-policy-and-governance.html">Public Policy &amp; Governance</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="social-sciences-and-governance/sociology-anthropology.html">Sociology · Anthropology</a></li>
-        
-      </ul>
-      
-      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="sports-and-recreation" hidden>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="sports-and-recreation/sports-business-sports-economics.html">Sports Business · Sports Economics</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="sports-and-recreation/sports-history.html">Sports History</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="sports-and-recreation/sports-science-kinesiology.html">Sports Science · Kinesiology</a></li>
-        
-      </ul>
-      
-      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="technology-and-engineering" hidden>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="technology-and-engineering/artificial-intelligence-machine-learning.html">Artificial Intelligence · Machine Learning</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="technology-and-engineering/computer-science-software.html">Computer Science · Software</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="technology-and-engineering/cybersecurity.html">Cybersecurity</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="technology-and-engineering/energy-systems.html">Energy Systems</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="technology-and-engineering/engineering.html">Engineering</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="technology-and-engineering/industrial-manufacturing-systems.html">Industrial · Manufacturing Systems</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="technology-and-engineering/materials-science.html">Materials Science</a></li>
-        
-        <li><a class="sidebar-row sidebar-tag-row" href="technology-and-engineering/space-exploration-spaceflight.html">Space Exploration · Spaceflight</a></li>
-        
-      </ul>
-      
-    </div>
-  </div>
-</aside>
-<script>
-(function () {
-  var sidebar = document.getElementById('sidebar');
-  var toggle = document.getElementById('sidebarCollapsedToggle');
-  var closeBtn = document.getElementById('sidebarClose');
-  var backBtn = document.getElementById('sidebarBack');
-  var backLabel = document.getElementById('sidebarBackLabel');
-  var clusterList = document.getElementById('sidebarClusterList');
-  var tagLists = Array.prototype.slice.call(document.querySelectorAll('.sidebar-tag-list'));
-  var busy = false;
-  var drillState = null;
-
-  function tagListFor(clusterSlug) {
-    for (var i = 0; i < tagLists.length; i++) {
-      if (tagLists[i].dataset.cluster === clusterSlug) return tagLists[i];
-    }
-    return null;
-  }
-
-  function swap(fromEl, toEl) {
-    busy = true;
-    fromEl.classList.add('sidebar-anim-out');
-    setTimeout(function () {
-      fromEl.hidden = true;
-      fromEl.classList.remove('sidebar-anim-out');
-      toEl.hidden = false;
-      toEl.classList.add('sidebar-anim-in-start');
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          toEl.classList.remove('sidebar-anim-in-start');
-          toEl.classList.add('sidebar-anim-in');
-          setTimeout(function () {
-            toEl.classList.remove('sidebar-anim-in');
-            busy = false;
-          }, 180);
-        });
-      });
-    }, 180);
-  }
-
-  function drillInto(clusterSlug, clusterName) {
-    if (busy || drillState === clusterSlug) return;
-    var target = tagListFor(clusterSlug);
-    if (!target) return;
-    drillState = clusterSlug;
-    backLabel.textContent = clusterName;
-    backBtn.hidden = false;
-    swap(clusterList, target);
-  }
-
-  function drillBack() {
-    if (busy || !drillState) return;
-    var current = tagListFor(drillState);
-    drillState = null;
-    backBtn.hidden = true;
-    swap(current, clusterList);
-  }
-
-  clusterList.addEventListener('click', function (e) {
-    var row = e.target.closest('.sidebar-cluster-row');
-    if (!row) return;
-    drillInto(row.dataset.cluster, row.dataset.clusterName);
-  });
-  backBtn.addEventListener('click', drillBack);
-  closeBtn.addEventListener('click', function () { sidebar.dataset.open = 'false'; });
-  toggle.addEventListener('click', function () { sidebar.dataset.open = 'true'; });
-
-  if (drillState) {
-    var initial = tagListFor(drillState);
-    if (initial) {
-      clusterList.hidden = true;
-      initial.hidden = false;
-      var row = clusterList.querySelector('[data-cluster="' + drillState + '"]');
-      backBtn.hidden = false;
-      backLabel.textContent = row ? row.dataset.clusterName : '';
-    }
-  }
-})();
-</script>
+    
     <div class="page-main">
       
       <main>
       
       
-<h1>News → Lessons</h1>
-<a class="pill-button" href="explore.html">Explore Topics</a>
+<h1>History</h1>
 
-<div class="latest-update-label">Latest update: 2026/07/22 (KST)</div>
+<div class="history-section-label">Today &middot; 2026/07/22 (KST)</div>
 <div class="lesson-list">
   
   <a class="lesson-row" href="entertainment-and-pop-culture/celebrity-culture-fame-studies.html#the-world-cup-as-spectacle-fame-politics-and-economics-after-the-final-whistle">
@@ -949,7 +640,275 @@
   
 </div>
 
-<a class="pill-button-block" href="history.html">See update history</a>
+<div class="history-section-label">In the past</div>
+
+<div class="history-day">
+  <button type="button" class="history-day-header" data-toggle-day data-default-open>
+    <span class="history-day-date">2026/07/21 (KST)</span>
+    <span class="history-day-count">2 lessons <span class="history-day-arrow">&#9656;</span></span>
+  </button>
+  <div class="history-day-body" hidden>
+    
+    <a class="lesson-row" href="social-sciences-and-governance/politics-political-science.html#democrats-midterm-strategy-concerns">
+      <span class="lesson-row-title">Democrats&#39; Midterm Strategy Concerns</span>
+      <span class="lesson-row-cluster">Social Sciences &amp; Governance</span>
+    </a>
+    
+    <a class="lesson-row" href="social-sciences-and-governance/politics-political-science.html#indias-cockroach-movement-protests">
+      <span class="lesson-row-title">India&#39;s Cockroach Movement Protests</span>
+      <span class="lesson-row-cluster">Social Sciences &amp; Governance</span>
+    </a>
+    
+  </div>
+</div>
+
+<div class="history-day">
+  <button type="button" class="history-day-header" data-toggle-day>
+    <span class="history-day-date">2026/07/19 (KST)</span>
+    <span class="history-day-count">3 lessons <span class="history-day-arrow">&#9656;</span></span>
+  </button>
+  <div class="history-day-body" hidden>
+    
+    <a class="lesson-row" href="natural-and-physical-sciences/climate-science-environmental-science.html#wildfire-smoke-and-air-quality-crises-across-the-eastern-united-states">
+      <span class="lesson-row-title">Wildfire Smoke and Air Quality Crises Across the Eastern United States</span>
+      <span class="lesson-row-cluster">Natural &amp; Physical Sciences</span>
+    </a>
+    
+    <a class="lesson-row" href="social-sciences-and-governance/politics-political-science.html#candidate-withdrawals-re-entries-and-open-seats-the-machinery-of-statewide-campaigns">
+      <span class="lesson-row-title">Candidate Withdrawals, Re-entries, and Open Seats: The Machinery of Statewide Campaigns</span>
+      <span class="lesson-row-cluster">Social Sciences &amp; Governance</span>
+    </a>
+    
+    <a class="lesson-row" href="sports-and-recreation/sports-history.html#major-championship-drama-records-rivalries-and-the-weight-of-golf-history">
+      <span class="lesson-row-title">Major Championship Drama: Records, Rivalries, and the Weight of Golf History</span>
+      <span class="lesson-row-cluster">Sports &amp; Recreation</span>
+    </a>
+    
+  </div>
+</div>
+
+<div class="history-day">
+  <button type="button" class="history-day-header" data-toggle-day>
+    <span class="history-day-date">2026/07/18 (KST)</span>
+    <span class="history-day-count">3 lessons <span class="history-day-arrow">&#9656;</span></span>
+  </button>
+  <div class="history-day-body" hidden>
+    
+    <a class="lesson-row" href="entertainment-and-pop-culture/film-tv-streaming-industry.html#blockbuster-anticipation-christopher-nolans-the-odyssey-and-the-economics-of-event-cinema">
+      <span class="lesson-row-title">Blockbuster Anticipation: Christopher Nolan&#39;s &#39;The Odyssey&#39; and the Economics of Event Cinema</span>
+      <span class="lesson-row-cluster">Entertainment &amp; Pop Culture</span>
+    </a>
+    
+    <a class="lesson-row" href="life-health-and-medicine/public-health-epidemiology.html#foodborne-illness-response-the-cyclospora-lettuce-outbreak-and-public-communication">
+      <span class="lesson-row-title">Foodborne Illness Response: The Cyclospora Lettuce Outbreak and Public Communication</span>
+      <span class="lesson-row-cluster">Life, Health &amp; Medicine</span>
+    </a>
+    
+    <a class="lesson-row" href="social-sciences-and-governance/politics-political-science.html#election-integrity-claims-and-the-politics-of-voter-fraud-rhetoric">
+      <span class="lesson-row-title">Election Integrity Claims and the Politics of Voter Fraud Rhetoric</span>
+      <span class="lesson-row-cluster">Social Sciences &amp; Governance</span>
+    </a>
+    
+  </div>
+</div>
+
+<div class="history-day">
+  <button type="button" class="history-day-header" data-toggle-day>
+    <span class="history-day-date">2026/07/17 (KST)</span>
+    <span class="history-day-count">3 lessons <span class="history-day-arrow">&#9656;</span></span>
+  </button>
+  <div class="history-day-body" hidden>
+    
+    <a class="lesson-row" href="business-and-finance/finance-markets.html#ai-infrastructure-spending-chip-supply-chains-and-market-skepticism">
+      <span class="lesson-row-title">AI Infrastructure Spending, Chip Supply Chains, and Market Skepticism</span>
+      <span class="lesson-row-cluster">Business &amp; Finance</span>
+    </a>
+    
+    <a class="lesson-row" href="natural-and-physical-sciences/astronomy-astrophysics.html#a-snapshot-of-current-space-science-atmospheres-ancient-landslides-and-human-physiology">
+      <span class="lesson-row-title">A Snapshot of Current Space Science: Atmospheres, Ancient Landslides, and Human Physiology</span>
+      <span class="lesson-row-cluster">Natural &amp; Physical Sciences</span>
+    </a>
+    
+    <a class="lesson-row" href="social-sciences-and-governance/politics-political-science.html#wartime-cabinet-reshuffle-zelenskyy-dismisses-defence-minister-amid-continued-russian-strikes">
+      <span class="lesson-row-title">Wartime Cabinet Reshuffle: Zelenskyy Dismisses Defence Minister Amid Continued Russian Strikes</span>
+      <span class="lesson-row-cluster">Social Sciences &amp; Governance</span>
+    </a>
+    
+  </div>
+</div>
+
+<div class="history-day">
+  <button type="button" class="history-day-header" data-toggle-day>
+    <span class="history-day-date">2026/07/16 (KST)</span>
+    <span class="history-day-count">3 lessons <span class="history-day-arrow">&#9656;</span></span>
+  </button>
+  <div class="history-day-body" hidden>
+    
+    <a class="lesson-row" href="social-sciences-and-governance/economics-macro-micro.html#central-bank-independence-under-political-scrutiny">
+      <span class="lesson-row-title">Central Bank Independence Under Political Scrutiny</span>
+      <span class="lesson-row-cluster">Social Sciences &amp; Governance</span>
+    </a>
+    
+    <a class="lesson-row" href="social-sciences-and-governance/politics-political-science.html#the-senate-confirmation-process-as-a-check-on-executive-power">
+      <span class="lesson-row-title">The Senate Confirmation Process as a Check on Executive Power</span>
+      <span class="lesson-row-cluster">Social Sciences &amp; Governance</span>
+    </a>
+    
+    <a class="lesson-row" href="technology-and-engineering/cybersecurity.html#patch-tuesday-and-the-escalating-arms-race-in-software-security">
+      <span class="lesson-row-title">Patch Tuesday and the Escalating Arms Race in Software Security</span>
+      <span class="lesson-row-cluster">Technology &amp; Engineering</span>
+    </a>
+    
+  </div>
+</div>
+
+<div class="history-day">
+  <button type="button" class="history-day-header" data-toggle-day>
+    <span class="history-day-date">2026/07/15 (KST)</span>
+    <span class="history-day-count">3 lessons <span class="history-day-arrow">&#9656;</span></span>
+  </button>
+  <div class="history-day-body" hidden>
+    
+    <a class="lesson-row" href="business-and-finance/finance-markets.html#bank-earnings-season-trading-booms-ai-optimism-and-market-reaction">
+      <span class="lesson-row-title">Bank Earnings Season: Trading Booms, AI Optimism, and Market Reaction</span>
+      <span class="lesson-row-cluster">Business &amp; Finance</span>
+    </a>
+    
+    <a class="lesson-row" href="security-conflict-and-public-safety/immigration-and-migration-studies.html#immigration-enforcement-under-scrutiny-use-of-force-fatalities-and-political-fallout">
+      <span class="lesson-row-title">Immigration Enforcement Under Scrutiny: Use of Force, Fatalities, and Political Fallout</span>
+      <span class="lesson-row-cluster">Security, Conflict &amp; Public Safety</span>
+    </a>
+    
+    <a class="lesson-row" href="social-sciences-and-governance/politics-political-science.html#political-reactions-to-a-senators-death-rhetoric-investigation-and-institutional-norms">
+      <span class="lesson-row-title">Political Reactions to a Senator&#39;s Death: Rhetoric, Investigation, and Institutional Norms</span>
+      <span class="lesson-row-cluster">Social Sciences &amp; Governance</span>
+    </a>
+    
+  </div>
+</div>
+
+<div class="history-day">
+  <button type="button" class="history-day-header" data-toggle-day>
+    <span class="history-day-date">2026/07/14 (KST)</span>
+    <span class="history-day-count">3 lessons <span class="history-day-arrow">&#9656;</span></span>
+  </button>
+  <div class="history-day-body" hidden>
+    
+    <a class="lesson-row" href="social-sciences-and-governance/politics-political-science.html#senate-vacancies-aortic-disease-and-the-politics-of-grief">
+      <span class="lesson-row-title">Senate Vacancies, Aortic Disease, and the Politics of Grief</span>
+      <span class="lesson-row-cluster">Social Sciences &amp; Governance</span>
+    </a>
+    
+    <a class="lesson-row" href="sports-and-recreation/sports-business-sports-economics.html#the-business-and-drama-of-a-world-cup-semifinal">
+      <span class="lesson-row-title">The Business and Drama of a World Cup Semifinal</span>
+      <span class="lesson-row-cluster">Sports &amp; Recreation</span>
+    </a>
+    
+    <a class="lesson-row" href="sports-and-recreation/sports-history.html#how-teams-build-rosters-through-the-mlb-draft">
+      <span class="lesson-row-title">How Teams Build Rosters Through the MLB Draft</span>
+      <span class="lesson-row-cluster">Sports &amp; Recreation</span>
+    </a>
+    
+  </div>
+</div>
+
+<div class="history-day">
+  <button type="button" class="history-day-header" data-toggle-day>
+    <span class="history-day-date">2026/07/12 (KST)</span>
+    <span class="history-day-count">3 lessons <span class="history-day-arrow">&#9656;</span></span>
+  </button>
+  <div class="history-day-body" hidden>
+    
+    <a class="lesson-row" href="life-health-and-medicine/public-health-epidemiology.html#the-summer-of-outbreaks">
+      <span class="lesson-row-title">The Summer of Outbreaks</span>
+      <span class="lesson-row-cluster">Life, Health &amp; Medicine</span>
+    </a>
+    
+    <a class="lesson-row" href="social-sciences-and-governance/public-policy-and-governance.html#a-bill-becomes-law-without-a-signature">
+      <span class="lesson-row-title">A Bill Becomes Law Without a Signature</span>
+      <span class="lesson-row-cluster">Social Sciences &amp; Governance</span>
+    </a>
+    
+    <a class="lesson-row" href="technology-and-engineering/space-exploration-spaceflight.html#the-reusable-rocket-race">
+      <span class="lesson-row-title">The Reusable-Rocket Race</span>
+      <span class="lesson-row-cluster">Technology &amp; Engineering</span>
+    </a>
+    
+  </div>
+</div>
+
+<div class="history-day">
+  <button type="button" class="history-day-header" data-toggle-day>
+    <span class="history-day-date">2026/07/10 (KST)</span>
+    <span class="history-day-count">3 lessons <span class="history-day-arrow">&#9656;</span></span>
+  </button>
+  <div class="history-day-body" hidden>
+    
+    <a class="lesson-row" href="entertainment-and-pop-culture/gaming-esports.html#the-games-industry-shakeout">
+      <span class="lesson-row-title">The Games-Industry Shakeout</span>
+      <span class="lesson-row-cluster">Entertainment &amp; Pop Culture</span>
+    </a>
+    
+    <a class="lesson-row" href="natural-and-physical-sciences/climate-science-environmental-science.html#the-climates-warning-signs">
+      <span class="lesson-row-title">The Climate&#39;s Warning Signs</span>
+      <span class="lesson-row-cluster">Natural &amp; Physical Sciences</span>
+    </a>
+    
+    <a class="lesson-row" href="social-sciences-and-governance/economics-macro-micro.html#the-squeezed-consumer">
+      <span class="lesson-row-title">The Squeezed Consumer</span>
+      <span class="lesson-row-cluster">Social Sciences &amp; Governance</span>
+    </a>
+    
+  </div>
+</div>
+
+<div class="history-day">
+  <button type="button" class="history-day-header" data-toggle-day>
+    <span class="history-day-date">2026/07/09 (KST)</span>
+    <span class="history-day-count">3 lessons <span class="history-day-arrow">&#9656;</span></span>
+  </button>
+  <div class="history-day-body" hidden>
+    
+    <a class="lesson-row" href="security-conflict-and-public-safety/war-armed-conflict-studies.html#iran-hormuz-and-the-oil-shock">
+      <span class="lesson-row-title">Iran, Hormuz, and the Oil Shock</span>
+      <span class="lesson-row-cluster">Security, Conflict &amp; Public Safety</span>
+    </a>
+    
+    <a class="lesson-row" href="sports-and-recreation/sports-business-sports-economics.html#the-business-end-of-the-world-cup">
+      <span class="lesson-row-title">The Business End of the World Cup</span>
+      <span class="lesson-row-cluster">Sports &amp; Recreation</span>
+    </a>
+    
+    <a class="lesson-row" href="technology-and-engineering/artificial-intelligence-machine-learning.html#the-frontier-model-race">
+      <span class="lesson-row-title">The Frontier-Model Race</span>
+      <span class="lesson-row-cluster">Technology &amp; Engineering</span>
+    </a>
+    
+  </div>
+</div>
+
+<div class="history-day">
+  <button type="button" class="history-day-header" data-toggle-day>
+    <span class="history-day-date">2026/07/07 (KST)</span>
+    <span class="history-day-count">2 lessons <span class="history-day-arrow">&#9656;</span></span>
+  </button>
+  <div class="history-day-body" hidden>
+    
+    <a class="lesson-row" href="security-conflict-and-public-safety/war-armed-conflict-studies.html#ukraines-deep-strike-campaign">
+      <span class="lesson-row-title">Ukraine&#39;s Deep-Strike Campaign</span>
+      <span class="lesson-row-cluster">Security, Conflict &amp; Public Safety</span>
+    </a>
+    
+    <a class="lesson-row" href="social-sciences-and-governance/geopolitics-international-relations.html#the-nato-spending-showdown">
+      <span class="lesson-row-title">The NATO Spending Showdown</span>
+      <span class="lesson-row-cluster">Social Sciences &amp; Governance</span>
+    </a>
+    
+  </div>
+</div>
+
+
+
 
       </main>
     </div>
@@ -983,6 +942,25 @@
   } else {
     window.addEventListener('resize', setHeaderHeight);
   }
+})();
+</script>
+
+<script>
+(function () {
+  var headers = Array.prototype.slice.call(document.querySelectorAll('[data-toggle-day]'));
+  headers.forEach(function (header) {
+    var body = header.parentElement.querySelector('.history-day-body');
+    var arrow = header.querySelector('.history-day-arrow');
+    function setOpen(open) {
+      body.hidden = !open;
+      header.classList.toggle('is-expanded', open);
+      arrow.innerHTML = open ? '&#9662;' : '&#9656;';
+    }
+    header.addEventListener('click', function () {
+      setOpen(body.hidden);
+    });
+    if (header.hasAttribute('data-default-open')) setOpen(true);
+  });
 })();
 </script>
 

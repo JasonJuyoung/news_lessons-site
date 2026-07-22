@@ -13,6 +13,11 @@
     --card-bg: #ffffff;
     --border: #e4dfd4;
     --link: #6b4226;
+    --hover-border: #d0cabc;
+    --hover-bg: #f8f6f1;
+    --accent-fill: #f8f0e8;
+    --accent-glow: rgba(138, 90, 59, 0.08);
+    --footer-height: 48px;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -23,8 +28,15 @@
       --card-bg: #262320;
       --border: #3a352c;
       --link: #e0b389;
+      /* Not specified in the design handoff (light-only prototype) — chosen to sit
+         between --card-bg and --border, consistent with the light-mode relationship. */
+      --hover-border: #4a443a;
+      --hover-bg: #2e2a25;
+      --accent-fill: #332a20;
+      --accent-glow: rgba(216, 168, 120, 0.15);
     }
   }
+  [hidden] { display: none !important; }
   * { box-sizing: border-box; }
   body {
     margin: 0;
@@ -32,36 +44,110 @@
     color: var(--fg);
     font-family: Georgia, "Times New Roman", serif;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
   a { color: var(--link); }
   header.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     border-bottom: 1px solid var(--border);
-    padding: 1.25rem 1.5rem;
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 30;
   }
   header.site-header a.brand {
-    font-size: 1.3rem;
+    font-size: 1.0625rem;
     font-weight: bold;
     text-decoration: none;
     color: var(--fg);
+  }
+  nav.site-nav {
+    display: flex;
+    gap: 26px;
+  }
+  nav.site-nav a {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.8125rem;
+    text-decoration: none;
+    color: var(--muted);
+  }
+  nav.site-nav a.is-active, nav.site-nav a:hover { color: var(--accent); }
+  .site-nav-dropdown { position: relative; display: flex; align-items: center; }
+  .site-nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    /* padding-top (not margin-top) so the gap between "Explore" and the box
+       below is still part of this element's hoverable area — a margin-top
+       gap is dead space the mouse has to cross, which drops :hover and
+       closes the menu before the pointer reaches it. */
+    padding-top: 10px;
+    z-index: 10;
+  }
+  .site-nav-dropdown:hover .site-nav-dropdown-menu,
+  .site-nav-dropdown:focus-within .site-nav-dropdown-menu {
+    display: block;
+  }
+  .site-nav-dropdown-menu-box {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px;
+    min-width: 90px;
+  }
+  .site-nav-dropdown-menu-box a {
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+  .site-nav-dropdown-menu-box a:hover { background: var(--hover-bg); }
+  .content-wrap {
+    flex: 1 0 auto;
+    /* An explicit positioning context for .switch-view-button's docked state —
+       this element's bottom edge always coincides with the footer's top edge
+       (footer is its very next sibling, no gap), so anchoring to it directly
+       is exact regardless of page length. Deliberately not relying on the
+       "no positioned ancestor" fallback (the initial containing block),
+       which doesn't reliably extend to a long page's true bottom. */
+    position: relative;
+  }
+  .page-shell {
+    display: flex;
+    align-items: flex-start;
   }
   nav.breadcrumb {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 0.85rem;
     color: var(--muted);
-    margin-top: 0.4rem;
+    margin: 1.5rem 1.5rem 0;
   }
   nav.breadcrumb a { color: var(--muted); }
+  .page-main { flex: 1; min-width: 0; }
   main {
     max-width: 780px;
     margin: 0 auto;
     padding: 2rem 1.5rem 4rem;
   }
   footer.site-footer {
+    flex-shrink: 0;
+    height: var(--footer-height);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     color: var(--muted);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 0.8rem;
-    padding: 2rem 1.5rem;
+    padding: 0 1.5rem;
     border-top: 1px solid var(--border);
   }
   h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; }
@@ -99,6 +185,12 @@
     margin-top: 0.35rem;
   }
   .lesson {
+    /* Every incoming anchor link to a lesson — a stub's "see [tag]" link,
+       History's rows, Home's latest-lessons list — targets this element's
+       id. Without this, the sticky header (position:sticky; top:0) covers
+       whatever the browser scrolls to, since native fragment-scrolling lands
+       the target flush with the viewport top. */
+    scroll-margin-top: var(--header-height, 58px);
     border-bottom: 1px solid var(--border);
     padding: 1.5rem 0;
   }
@@ -109,6 +201,7 @@
     color: var(--muted);
     margin: 0.3rem 0 1rem;
   }
+  .lesson .lesson-meta > div { line-height: 1.5; }
   .lesson .tag-primary { color: var(--accent); font-weight: 600; }
   .lesson-body h3 { margin-top: 1.4rem; }
   .lesson-body ul { padding-left: 1.3rem; }
@@ -120,6 +213,7 @@
     color: var(--muted);
     margin: 0.3rem 0 0.6rem;
   }
+  .stub .stub-meta > div { line-height: 1.5; }
   .empty-note { color: var(--muted); font-style: italic; }
   .back-button {
     display: inline-flex;
@@ -137,20 +231,704 @@
     margin-bottom: 1.5rem;
   }
   .back-button:hover { border-color: var(--accent); color: var(--accent); }
+  .back-button:not([hidden]) + .back-button { margin-left: 0.6rem; }
+
+  .sidebar {
+    flex: none;
+    width: 220px;
+    border-right: 1px solid var(--border);
+    padding: 16px 14px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.8125rem;
+    /* --header-height is measured and set precisely by JS (see the shared
+       script near the end of body) rather than guessed here — a wrong
+       hardcoded value would either gap below the header or hide behind it. */
+    position: sticky;
+    top: var(--header-height, 58px);
+  }
+  .sidebar[data-open="false"] {
+    width: 28px;
+    padding: 16px 0;
+  }
+  .sidebar-collapsed-toggle {
+    display: none;
+    writing-mode: vertical-rl;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 0;
+  }
+  .sidebar[data-open="false"] .sidebar-collapsed-toggle { display: block; }
+  .sidebar[data-open="false"] .sidebar-panel { display: none; }
+  .sidebar-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 1.5rem;
+  }
+  .sidebar-back, .sidebar-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .sidebar-back:hover, .sidebar-close:hover { color: var(--accent); }
+  .sidebar-list-viewport {
+    max-height: 520px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 8px;
+    position: relative;
+  }
+  .sidebar-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-tag-list { padding-left: 14px; }
+  .sidebar-row {
+    display: block;
+    /* Explicit width, not just width:auto — a <button> (cluster rows) doesn't
+       auto-stretch to fill its container the way an <a> (tag rows) does, even
+       with display:block set, so leaving width unset made cluster rows'
+       hover boxes size to their text while tag rows filled the container.
+       calc(100% - 6px) accounts for the 3px left/right margins below exactly,
+       so this still doesn't reintroduce the overflow/clipping bug those
+       margins caused when this was width:100% outright. */
+    width: calc(100% - 6px);
+    text-align: left;
+    background: none;
+    border: none;
+    text-decoration: none;
+    color: var(--fg);
+    font-family: inherit;
+    font-size: inherit;
+    padding: 6px 8px;
+    margin: 0 3px 6px 3px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .sidebar-row:hover { box-shadow: 0 0 0 1px var(--hover-border); }
+  .sidebar-row.is-current { color: var(--accent); background: var(--hover-bg); }
+  .sidebar-anim-out {
+    transition: transform 180ms ease, opacity 180ms ease;
+    transform: translateX(-14px);
+    opacity: 0;
+  }
+  .sidebar-anim-in-start {
+    transition: none;
+    transform: translateX(14px);
+    opacity: 0;
+  }
+  .sidebar-anim-in {
+    transition: transform 180ms ease, opacity 180ms ease;
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .explore-caption {
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  .explore-back { text-align: center; margin: 0 0 10px; }
+  .explore-back button {
+    background: none;
+    border: none;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.9rem;
+    color: var(--accent);
+    cursor: pointer;
+    padding: 0;
+  }
+  .explore-map {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .explore-map-panel {
+    position: relative;
+    flex: none;
+  }
+  .explore-bubble {
+    position: absolute;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    font: 600 13px Georgia, "Times New Roman", serif;
+    color: var(--fg);
+    text-align: center;
+    line-height: 1.2;
+    padding: 8px;
+  }
+  .explore-cluster-bubble, .explore-tag-bubble {
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .explore-cluster-bubble:hover, .explore-tag-bubble:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .explore-center-root {
+    border: 1px dashed var(--hover-border);
+    background: var(--bg);
+    color: var(--muted);
+    font: 600 15px Georgia, "Times New Roman", serif;
+    line-height: 1.2;
+  }
+  .explore-center-cluster {
+    border: 2px solid var(--accent);
+    background: var(--accent-fill);
+    color: var(--accent);
+    font: 700 15px Georgia, "Times New Roman", serif;
+    padding: 8px;
+    box-shadow: 0 0 0 4px var(--accent-glow);
+  }
+  .explore-anim-out {
+    transition: transform 200ms ease, opacity 200ms ease, filter 200ms ease;
+    transform: scale(1.06);
+    opacity: 0;
+    filter: blur(4px);
+  }
+  .explore-anim-in-start {
+    transition: none;
+    transform: scale(0.92);
+    opacity: 0;
+    filter: blur(4px);
+  }
+  .explore-anim-in {
+    transition: transform 200ms ease, opacity 200ms ease, filter 200ms ease;
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  .history-section-label {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+  .lesson-list {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2px 16px;
+    margin-bottom: 22px;
+  }
+  .lesson-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--fg);
+  }
+  .lesson-row:hover { color: var(--accent); }
+  .lesson-row-title { font-size: 0.84375rem; }
+  .lesson-row-cluster {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.6875rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .lesson-list .lesson-row { padding: 11px 0; border-bottom: 1px dotted var(--border); }
+  .lesson-list .lesson-row:last-child { border-bottom: none; }
+  .history-day {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .history-day-header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--fg);
+  }
+  .history-day-header.is-expanded { background: var(--hover-bg); }
+  .history-day-date { font-size: 0.8125rem; font-weight: 700; }
+  .history-day-count {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.6875rem;
+    color: var(--muted);
+  }
+  .history-day-body { padding: 4px 16px; }
+  .history-day-body .lesson-row { padding: 9px 0; border-bottom: 1px dotted var(--border); }
+  .history-day-body .lesson-row:last-child { border-bottom: none; }
+
+  .pill-button {
+    display: inline-block;
+    padding: 11px 28px;
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    color: var(--accent);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.8125rem;
+    text-decoration: none;
+    margin-bottom: 24px;
+  }
+  .pill-button:hover { background: var(--accent-fill); }
+  .pill-button-block {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    text-align: center;
+    margin-top: 16px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .pill-button-block:hover { border-color: var(--accent); color: var(--accent); }
+  .switch-view-button {
+    position: fixed;
+    bottom: 20px;
+    right: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--fg);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.6rem 1.1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    z-index: 20;
+  }
+  .switch-view-button:hover { border-color: var(--accent); color: var(--accent); }
+  /* Docked state, toggled by IntersectionObserver once the footer scrolls into
+     view: switches from tracking the viewport to being anchored inside
+     .content-wrap (bottom:20px from *its* edge, which is the footer's top
+     edge by construction) — so it scrolls with the page from then on, always
+     exactly 20px above the footer regardless of page length. */
+  .switch-view-button.is-docked {
+    position: absolute;
+    bottom: 20px;
+  }
+  .latest-update-label {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.6875rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .glossary-subtitle {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.71875rem;
+    color: var(--muted);
+    margin: 0 0 16px;
+  }
+  .glossary-az {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.71875rem;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+  }
+  .glossary-az .is-active { color: var(--accent); font-weight: 600; }
+  .glossary-letter {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .glossary-term { margin-bottom: 16px; }
+  .glossary-term-name { font-size: 0.875rem; font-weight: 700; color: var(--fg); }
+  .glossary-term-definition {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--muted);
+  }
+  .glossary-term-lesson {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.6875rem;
+    color: var(--accent);
+    margin-top: 3px;
+    text-decoration: none;
+  }
+  .glossary-term-lesson:hover { text-decoration: underline; }
+
 </style>
 </head>
-<body>
+<body class="">
 <header class="site-header">
   <a class="brand" href="../index.html">News → Lessons</a>
-  
+  <nav class="site-nav">
+    <div class="site-nav-dropdown">
+      <a href="../explore.html" class="">Explore</a>
+      <div class="site-nav-dropdown-menu">
+        <div class="site-nav-dropdown-menu-box">
+          <a href="../explore.html" class="">Map</a>
+          <a href="../explore-cards.html" class="">Cards</a>
+        </div>
+      </div>
+    </div>
+    <a href="../history.html" class="">History</a>
+    <a href="../glossary.html" class="">Glossary</a>
+  </nav>
+</header>
+<div class="content-wrap">
+  <div class="page-shell">
+    <aside class="sidebar" id="sidebar" data-open="true">
+  <button type="button" class="sidebar-collapsed-toggle" id="sidebarCollapsedToggle" aria-label="Open clusters">&equiv; Clusters</button>
+  <div class="sidebar-panel" id="sidebarPanel">
+    <div class="sidebar-panel-header">
+      <button type="button" class="sidebar-back" id="sidebarBack" hidden>&larr; <span id="sidebarBackLabel"></span></button>
+      <button type="button" class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">&times;</button>
+    </div>
+    <div class="sidebar-list-viewport" id="sidebarViewport">
+      <ul class="sidebar-list" id="sidebarClusterList" data-panel="clusters">
+        
+        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="business-and-finance" data-cluster-name="Business &amp; Finance">Business &amp; Finance</button></li>
+        
+        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="culture-and-humanities" data-cluster-name="Culture &amp; Humanities">Culture &amp; Humanities</button></li>
+        
+        <li><button type="button" class="sidebar-row sidebar-cluster-row is-current" data-cluster="entertainment-and-pop-culture" data-cluster-name="Entertainment &amp; Pop Culture">Entertainment &amp; Pop Culture</button></li>
+        
+        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="everyday-life-and-consumer" data-cluster-name="Everyday Life &amp; Consumer">Everyday Life &amp; Consumer</button></li>
+        
+        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="history" data-cluster-name="History">History</button></li>
+        
+        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="infrastructure-and-movement" data-cluster-name="Infrastructure &amp; Movement">Infrastructure &amp; Movement</button></li>
+        
+        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="life-health-and-medicine" data-cluster-name="Life, Health &amp; Medicine">Life, Health &amp; Medicine</button></li>
+        
+        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="natural-and-physical-sciences" data-cluster-name="Natural &amp; Physical Sciences">Natural &amp; Physical Sciences</button></li>
+        
+        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="security-conflict-and-public-safety" data-cluster-name="Security, Conflict &amp; Public Safety">Security, Conflict &amp; Public Safety</button></li>
+        
+        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="social-sciences-and-governance" data-cluster-name="Social Sciences &amp; Governance">Social Sciences &amp; Governance</button></li>
+        
+        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="sports-and-recreation" data-cluster-name="Sports &amp; Recreation">Sports &amp; Recreation</button></li>
+        
+        <li><button type="button" class="sidebar-row sidebar-cluster-row" data-cluster="technology-and-engineering" data-cluster-name="Technology &amp; Engineering">Technology &amp; Engineering</button></li>
+        
+      </ul>
+      
+      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="business-and-finance" hidden>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../business-and-finance/business-strategy-management.html">Business Strategy · Management</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../business-and-finance/corporate-governance.html">Corporate Governance</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../business-and-finance/finance-markets.html">Finance · Markets</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../business-and-finance/trade-and-global-supply-chains.html">Trade &amp; Global Supply Chains</a></li>
+        
+      </ul>
+      
+      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="culture-and-humanities" hidden>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../culture-and-humanities/art-art-history.html">Art · Art History</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../culture-and-humanities/bioethics.html">Bioethics</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../culture-and-humanities/culture-cultural-studies.html">Culture · Cultural Studies</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../culture-and-humanities/linguistics.html">Linguistics</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../culture-and-humanities/literature.html">Literature</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../culture-and-humanities/media-studies-journalism.html">Media Studies · Journalism</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../culture-and-humanities/philosophy-ethics.html">Philosophy · Ethics</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../culture-and-humanities/religion-theology.html">Religion · Theology</a></li>
+        
+      </ul>
+      
+      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="entertainment-and-pop-culture" hidden>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../entertainment-and-pop-culture/celebrity-culture-fame-studies.html">Celebrity Culture · Fame Studies</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../entertainment-and-pop-culture/fashion.html">Fashion</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row is-current" href="../entertainment-and-pop-culture/film-tv-streaming-industry.html">Film · TV · Streaming Industry</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../entertainment-and-pop-culture/gaming-esports.html">Gaming · Esports</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../entertainment-and-pop-culture/music-industry.html">Music Industry</a></li>
+        
+      </ul>
+      
+      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="everyday-life-and-consumer" hidden>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../everyday-life-and-consumer/consumer-affairs-product-safety.html">Consumer Affairs · Product Safety</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../everyday-life-and-consumer/family-and-relationships-human-interest.html">Family &amp; Relationships · Human Interest</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../everyday-life-and-consumer/food-and-culinary-science.html">Food &amp; Culinary Science</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../everyday-life-and-consumer/personal-finance.html">Personal Finance</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../everyday-life-and-consumer/real-estate-housing-markets.html">Real Estate · Housing Markets</a></li>
+        
+      </ul>
+      
+      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="history" hidden>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../history/constitutional-legal-history.html">Constitutional · Legal History</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../history/economic-history.html">Economic History</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../history/military-history.html">Military History</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../history/social-cultural-history.html">Social · Cultural History</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../history/world-history.html">World History</a></li>
+        
+      </ul>
+      
+      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="infrastructure-and-movement" hidden>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../infrastructure-and-movement/agriculture-food-systems.html">Agriculture · Food Systems</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../infrastructure-and-movement/labor-economics-workplace-trends.html">Labor Economics · Workplace Trends</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../infrastructure-and-movement/transportation-systems.html">Transportation Systems</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../infrastructure-and-movement/urban-planning.html">Urban Planning</a></li>
+        
+      </ul>
+      
+      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="life-health-and-medicine" hidden>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../life-health-and-medicine/medicine-clinical-science.html">Medicine · Clinical Science</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../life-health-and-medicine/nutrition.html">Nutrition</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../life-health-and-medicine/psychology-neuroscience.html">Psychology · Neuroscience</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../life-health-and-medicine/public-health-epidemiology.html">Public Health · Epidemiology</a></li>
+        
+      </ul>
+      
+      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="natural-and-physical-sciences" hidden>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../natural-and-physical-sciences/astronomy-astrophysics.html">Astronomy · Astrophysics</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../natural-and-physical-sciences/biology.html">Biology</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../natural-and-physical-sciences/chemistry.html">Chemistry</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../natural-and-physical-sciences/climate-science-environmental-science.html">Climate Science · Environmental Science</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../natural-and-physical-sciences/earth-science-geology.html">Earth Science · Geology</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../natural-and-physical-sciences/ecology.html">Ecology</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../natural-and-physical-sciences/geography-physical-and-human.html">Geography (Physical &amp; Human)</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../natural-and-physical-sciences/mathematics.html">Mathematics</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../natural-and-physical-sciences/physics.html">Physics</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../natural-and-physical-sciences/planetary-science.html">Planetary Science</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../natural-and-physical-sciences/wildlife-conservation-biology.html">Wildlife · Conservation Biology</a></li>
+        
+      </ul>
+      
+      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="security-conflict-and-public-safety" hidden>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../security-conflict-and-public-safety/criminal-justice-policing.html">Criminal Justice · Policing</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../security-conflict-and-public-safety/emergency-management-disaster-response.html">Emergency Management · Disaster Response</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../security-conflict-and-public-safety/human-rights.html">Human Rights</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../security-conflict-and-public-safety/immigration-and-migration-studies.html">Immigration &amp; Migration Studies</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../security-conflict-and-public-safety/terrorism-extremism-studies.html">Terrorism · Extremism Studies</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../security-conflict-and-public-safety/war-armed-conflict-studies.html">War · Armed Conflict Studies</a></li>
+        
+      </ul>
+      
+      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="social-sciences-and-governance" hidden>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../social-sciences-and-governance/demography.html">Demography</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../social-sciences-and-governance/diplomacy.html">Diplomacy</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../social-sciences-and-governance/economics-macro-micro.html">Economics (Macro · Micro)</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../social-sciences-and-governance/education-systems.html">Education Systems</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../social-sciences-and-governance/geopolitics-international-relations.html">Geopolitics · International Relations</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../social-sciences-and-governance/law-legal-systems.html">Law · Legal Systems</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../social-sciences-and-governance/politics-political-science.html">Politics · Political Science</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../social-sciences-and-governance/public-policy-and-governance.html">Public Policy &amp; Governance</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../social-sciences-and-governance/sociology-anthropology.html">Sociology · Anthropology</a></li>
+        
+      </ul>
+      
+      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="sports-and-recreation" hidden>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../sports-and-recreation/sports-business-sports-economics.html">Sports Business · Sports Economics</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../sports-and-recreation/sports-history.html">Sports History</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../sports-and-recreation/sports-science-kinesiology.html">Sports Science · Kinesiology</a></li>
+        
+      </ul>
+      
+      <ul class="sidebar-list sidebar-tag-list" data-panel="tags" data-cluster="technology-and-engineering" hidden>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../technology-and-engineering/artificial-intelligence-machine-learning.html">Artificial Intelligence · Machine Learning</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../technology-and-engineering/computer-science-software.html">Computer Science · Software</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../technology-and-engineering/cybersecurity.html">Cybersecurity</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../technology-and-engineering/energy-systems.html">Energy Systems</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../technology-and-engineering/engineering.html">Engineering</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../technology-and-engineering/industrial-manufacturing-systems.html">Industrial · Manufacturing Systems</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../technology-and-engineering/materials-science.html">Materials Science</a></li>
+        
+        <li><a class="sidebar-row sidebar-tag-row" href="../technology-and-engineering/space-exploration-spaceflight.html">Space Exploration · Spaceflight</a></li>
+        
+      </ul>
+      
+    </div>
+  </div>
+</aside>
+<script>
+(function () {
+  var sidebar = document.getElementById('sidebar');
+  var toggle = document.getElementById('sidebarCollapsedToggle');
+  var closeBtn = document.getElementById('sidebarClose');
+  var backBtn = document.getElementById('sidebarBack');
+  var backLabel = document.getElementById('sidebarBackLabel');
+  var clusterList = document.getElementById('sidebarClusterList');
+  var tagLists = Array.prototype.slice.call(document.querySelectorAll('.sidebar-tag-list'));
+  var busy = false;
+  var drillState = "entertainment-and-pop-culture";
+
+  function tagListFor(clusterSlug) {
+    for (var i = 0; i < tagLists.length; i++) {
+      if (tagLists[i].dataset.cluster === clusterSlug) return tagLists[i];
+    }
+    return null;
+  }
+
+  function swap(fromEl, toEl) {
+    busy = true;
+    fromEl.classList.add('sidebar-anim-out');
+    setTimeout(function () {
+      fromEl.hidden = true;
+      fromEl.classList.remove('sidebar-anim-out');
+      toEl.hidden = false;
+      toEl.classList.add('sidebar-anim-in-start');
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          toEl.classList.remove('sidebar-anim-in-start');
+          toEl.classList.add('sidebar-anim-in');
+          setTimeout(function () {
+            toEl.classList.remove('sidebar-anim-in');
+            busy = false;
+          }, 180);
+        });
+      });
+    }, 180);
+  }
+
+  function drillInto(clusterSlug, clusterName) {
+    if (busy || drillState === clusterSlug) return;
+    var target = tagListFor(clusterSlug);
+    if (!target) return;
+    drillState = clusterSlug;
+    backLabel.textContent = clusterName;
+    backBtn.hidden = false;
+    swap(clusterList, target);
+  }
+
+  function drillBack() {
+    if (busy || !drillState) return;
+    var current = tagListFor(drillState);
+    drillState = null;
+    backBtn.hidden = true;
+    swap(current, clusterList);
+  }
+
+  clusterList.addEventListener('click', function (e) {
+    var row = e.target.closest('.sidebar-cluster-row');
+    if (!row) return;
+    drillInto(row.dataset.cluster, row.dataset.clusterName);
+  });
+  backBtn.addEventListener('click', drillBack);
+  closeBtn.addEventListener('click', function () { sidebar.dataset.open = 'false'; });
+  toggle.addEventListener('click', function () { sidebar.dataset.open = 'true'; });
+
+  if (drillState) {
+    var initial = tagListFor(drillState);
+    if (initial) {
+      clusterList.hidden = true;
+      initial.hidden = false;
+      var row = clusterList.querySelector('[data-cluster="' + drillState + '"]');
+      backBtn.hidden = false;
+      backLabel.textContent = row ? row.dataset.clusterName : '';
+    }
+  }
+})();
+</script>
+    <div class="page-main">
+      
 <nav class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Entertainment &amp; Pop Culture</a> / Film · TV · Streaming Industry</nav>
 
-</header>
-<main>
+      <main>
+      
+<a class="back-button" id="backToExploreMap" href="../explore.html#entertainment-and-pop-culture" hidden>&larr; Back to Explore (Map)</a>
+<a class="back-button" id="backToExploreCards" href="../entertainment-and-pop-culture/index.html" hidden>&larr; Back to Explore (Cards)</a>
 
-<a class="back-button" href="index.html">&larr; Back to Entertainment &amp; Pop Culture</a>
-
-
+      
 <h1>Film · TV · Streaming Industry</h1>
 
 
@@ -158,8 +936,9 @@
   <h2>Blockbuster Anticipation: Christopher Nolan&#39;s &#39;The Odyssey&#39; and the Economics of Event Cinema</h2>
   
   <div class="lesson-meta">
-    <span class="tag-primary">Entertainment &amp; Pop Culture: Film · TV · Streaming Industry</span> · Secondary: Celebrity Culture · Fame Studies
-    &middot; 2026/07/18 (KST)
+    <div class="tag-primary">Entertainment &amp; Pop Culture: Film · TV · Streaming Industry</div>
+    <div>Secondary tags: Celebrity Culture · Fame Studies</div>
+    <div>2026/07/18 (KST)</div>
   </div>
   <div class="lesson-body">
     <h3>Summary</h3>
@@ -193,9 +972,50 @@
 
 
 
-</main>
+      </main>
+    </div>
+  </div>
+  
+</div>
 <footer class="site-footer">
   Generated from the News → Lessons library. Not affiliated with any linked publisher.
 </footer>
+<script>
+(function () {
+  var btn = document.querySelector('.switch-view-button');
+  var footer = document.querySelector('footer.site-footer');
+  if (!btn || !footer || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    btn.classList.toggle('is-docked', entries[0].isIntersecting);
+  }).observe(footer);
+})();
+(function () {
+  // Measured, not guessed — the sidebar's sticky "top" offset has to match
+  // the header's real rendered height exactly, or it either gaps below the
+  // header or hides underneath it.
+  var header = document.querySelector('header.site-header');
+  if (!header) return;
+  function setHeaderHeight() {
+    document.documentElement.style.setProperty('--header-height', header.offsetHeight + 'px');
+  }
+  setHeaderHeight();
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(setHeaderHeight).observe(header);
+  } else {
+    window.addEventListener('resize', setHeaderHeight);
+  }
+})();
+</script>
+
+<script>
+(function () {
+  var from = new URLSearchParams(location.search).get('from');
+  var id = from === 'explore-map' ? 'backToExploreMap' : from === 'explore-cards' ? 'backToExploreCards' : null;
+  if (!id) return;
+  var el = document.getElementById(id);
+  if (el) el.hidden = false;
+})();
+</script>
+
 </body>
 </html>

@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Explore — News → Lessons</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --fg: #24211c;
+    --muted: #6b6558;
+    --accent: #8a5a3b;
+    --card-bg: #ffffff;
+    --border: #e4dfd4;
+    --link: #6b4226;
+    --hover-border: #d0cabc;
+    --hover-bg: #f8f6f1;
+    --accent-fill: #f8f0e8;
+    --accent-glow: rgba(138, 90, 59, 0.08);
+    --footer-height: 48px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1a17;
+      --fg: #e9e4d8;
+      --muted: #a89f8c;
+      --accent: #d8a878;
+      --card-bg: #262320;
+      --border: #3a352c;
+      --link: #e0b389;
+      /* Not specified in the design handoff (light-only prototype) — chosen to sit
+         between --card-bg and --border, consistent with the light-mode relationship. */
+      --hover-border: #4a443a;
+      --hover-bg: #2e2a25;
+      --accent-fill: #332a20;
+      --accent-glow: rgba(216, 168, 120, 0.15);
+    }
+  }
+  [hidden] { display: none !important; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  a { color: var(--link); }
+  header.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 30;
+  }
+  header.site-header a.brand {
+    font-size: 1.0625rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: var(--fg);
+  }
+  nav.site-nav {
+    display: flex;
+    gap: 26px;
+  }
+  nav.site-nav a {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.8125rem;
+    text-decoration: none;
+    color: var(--muted);
+  }
+  nav.site-nav a.is-active, nav.site-nav a:hover { color: var(--accent); }
+  .site-nav-dropdown { position: relative; display: flex; align-items: center; }
+  .site-nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    /* padding-top (not margin-top) so the gap between "Explore" and the box
+       below is still part of this element's hoverable area — a margin-top
+       gap is dead space the mouse has to cross, which drops :hover and
+       closes the menu before the pointer reaches it. */
+    padding-top: 10px;
+    z-index: 10;
+  }
+  .site-nav-dropdown:hover .site-nav-dropdown-menu,
+  .site-nav-dropdown:focus-within .site-nav-dropdown-menu {
+    display: block;
+  }
+  .site-nav-dropdown-menu-box {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px;
+    min-width: 90px;
+  }
+  .site-nav-dropdown-menu-box a {
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+  .site-nav-dropdown-menu-box a:hover { background: var(--hover-bg); }
+  .content-wrap {
+    flex: 1 0 auto;
+    /* An explicit positioning context for .switch-view-button's docked state —
+       this element's bottom edge always coincides with the footer's top edge
+       (footer is its very next sibling, no gap), so anchoring to it directly
+       is exact regardless of page length. Deliberately not relying on the
+       "no positioned ancestor" fallback (the initial containing block),
+       which doesn't reliably extend to a long page's true bottom. */
+    position: relative;
+  }
+  .page-shell {
+    display: flex;
+    align-items: flex-start;
+  }
+  nav.breadcrumb {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 1.5rem 1.5rem 0;
+  }
+  nav.breadcrumb a { color: var(--muted); }
+  .page-main { flex: 1; min-width: 0; }
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+  footer.site-footer {
+    flex-shrink: 0;
+    height: var(--footer-height);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--muted);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.8rem;
+    padding: 0 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    align-items: stretch;
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+    margin: 1.5rem 0 0;
+  }
+  .grid > li {
+    display: flex;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    text-decoration: none;
+    color: var(--fg);
+  }
+  .card:hover { border-color: var(--accent); }
+  .card .card-title { font-weight: bold; }
+  .card .card-meta {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.35rem;
+  }
+  .lesson {
+    /* Every incoming anchor link to a lesson — a stub's "see [tag]" link,
+       History's rows, Home's latest-lessons list — targets this element's
+       id. Without this, the sticky header (position:sticky; top:0) covers
+       whatever the browser scrolls to, since native fragment-scrolling lands
+       the target flush with the viewport top. */
+    scroll-margin-top: var(--header-height, 58px);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 0;
+  }
+  .lesson:last-child { border-bottom: none; }
+  .lesson .lesson-meta {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 0.3rem 0 1rem;
+  }
+  .lesson .lesson-meta > div { line-height: 1.5; }
+  .lesson .tag-primary { color: var(--accent); font-weight: 600; }
+  .lesson-body h3 { margin-top: 1.4rem; }
+  .lesson-body ul { padding-left: 1.3rem; }
+  .stub {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  .stub .stub-meta {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 0.3rem 0 0.6rem;
+  }
+  .stub .stub-meta > div { line-height: 1.5; }
+  .empty-note { color: var(--muted); font-style: italic; }
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--fg);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  .back-button:hover { border-color: var(--accent); color: var(--accent); }
+  .back-button:not([hidden]) + .back-button { margin-left: 0.6rem; }
+
+  .sidebar {
+    flex: none;
+    width: 220px;
+    border-right: 1px solid var(--border);
+    padding: 16px 14px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.8125rem;
+    /* --header-height is measured and set precisely by JS (see the shared
+       script near the end of body) rather than guessed here — a wrong
+       hardcoded value would either gap below the header or hide behind it. */
+    position: sticky;
+    top: var(--header-height, 58px);
+  }
+  .sidebar[data-open="false"] {
+    width: 28px;
+    padding: 16px 0;
+  }
+  .sidebar-collapsed-toggle {
+    display: none;
+    writing-mode: vertical-rl;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 0;
+  }
+  .sidebar[data-open="false"] .sidebar-collapsed-toggle { display: block; }
+  .sidebar[data-open="false"] .sidebar-panel { display: none; }
+  .sidebar-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 1.5rem;
+  }
+  .sidebar-back, .sidebar-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .sidebar-back:hover, .sidebar-close:hover { color: var(--accent); }
+  .sidebar-list-viewport {
+    max-height: 520px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 8px;
+    position: relative;
+  }
+  .sidebar-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-tag-list { padding-left: 14px; }
+  .sidebar-row {
+    display: block;
+    /* Explicit width, not just width:auto — a <button> (cluster rows) doesn't
+       auto-stretch to fill its container the way an <a> (tag rows) does, even
+       with display:block set, so leaving width unset made cluster rows'
+       hover boxes size to their text while tag rows filled the container.
+       calc(100% - 6px) accounts for the 3px left/right margins below exactly,
+       so this still doesn't reintroduce the overflow/clipping bug those
+       margins caused when this was width:100% outright. */
+    width: calc(100% - 6px);
+    text-align: left;
+    background: none;
+    border: none;
+    text-decoration: none;
+    color: var(--fg);
+    font-family: inherit;
+    font-size: inherit;
+    padding: 6px 8px;
+    margin: 0 3px 6px 3px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .sidebar-row:hover { box-shadow: 0 0 0 1px var(--hover-border); }
+  .sidebar-row.is-current { color: var(--accent); background: var(--hover-bg); }
+  .sidebar-anim-out {
+    transition: transform 180ms ease, opacity 180ms ease;
+    transform: translateX(-14px);
+    opacity: 0;
+  }
+  .sidebar-anim-in-start {
+    transition: none;
+    transform: translateX(14px);
+    opacity: 0;
+  }
+  .sidebar-anim-in {
+    transition: transform 180ms ease, opacity 180ms ease;
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .explore-caption {
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  .explore-back { text-align: center; margin: 0 0 10px; }
+  .explore-back button {
+    background: none;
+    border: none;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.9rem;
+    color: var(--accent);
+    cursor: pointer;
+    padding: 0;
+  }
+  .explore-map {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .explore-map-panel {
+    position: relative;
+    flex: none;
+  }
+  .explore-bubble {
+    position: absolute;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    font: 600 13px Georgia, "Times New Roman", serif;
+    color: var(--fg);
+    text-align: center;
+    line-height: 1.2;
+    padding: 8px;
+  }
+  .explore-cluster-bubble, .explore-tag-bubble {
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .explore-cluster-bubble:hover, .explore-tag-bubble:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .explore-center-root {
+    border: 1px dashed var(--hover-border);
+    background: var(--bg);
+    color: var(--muted);
+    font: 600 15px Georgia, "Times New Roman", serif;
+    line-height: 1.2;
+  }
+  .explore-center-cluster {
+    border: 2px solid var(--accent);
+    background: var(--accent-fill);
+    color: var(--accent);
+    font: 700 15px Georgia, "Times New Roman", serif;
+    padding: 8px;
+    box-shadow: 0 0 0 4px var(--accent-glow);
+  }
+  .explore-anim-out {
+    transition: transform 200ms ease, opacity 200ms ease, filter 200ms ease;
+    transform: scale(1.06);
+    opacity: 0;
+    filter: blur(4px);
+  }
+  .explore-anim-in-start {
+    transition: none;
+    transform: scale(0.92);
+    opacity: 0;
+    filter: blur(4px);
+  }
+  .explore-anim-in {
+    transition: transform 200ms ease, opacity 200ms ease, filter 200ms ease;
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  .history-section-label {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+  .lesson-list {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2px 16px;
+    margin-bottom: 22px;
+  }
+  .lesson-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--fg);
+  }
+  .lesson-row:hover { color: var(--accent); }
+  .lesson-row-title { font-size: 0.84375rem; }
+  .lesson-row-cluster {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.6875rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .lesson-list .lesson-row { padding: 11px 0; border-bottom: 1px dotted var(--border); }
+  .lesson-list .lesson-row:last-child { border-bottom: none; }
+  .history-day {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .history-day-header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--fg);
+  }
+  .history-day-header.is-expanded { background: var(--hover-bg); }
+  .history-day-date { font-size: 0.8125rem; font-weight: 700; }
+  .history-day-count {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.6875rem;
+    color: var(--muted);
+  }
+  .history-day-body { padding: 4px 16px; }
+  .history-day-body .lesson-row { padding: 9px 0; border-bottom: 1px dotted var(--border); }
+  .history-day-body .lesson-row:last-child { border-bottom: none; }
+
+  .pill-button {
+    display: inline-block;
+    padding: 11px 28px;
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    color: var(--accent);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.8125rem;
+    text-decoration: none;
+    margin-bottom: 24px;
+  }
+  .pill-button:hover { background: var(--accent-fill); }
+  .pill-button-block {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    text-align: center;
+    margin-top: 16px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .pill-button-block:hover { border-color: var(--accent); color: var(--accent); }
+  .switch-view-button {
+    position: fixed;
+    bottom: 20px;
+    right: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--fg);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.6rem 1.1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    z-index: 20;
+  }
+  .switch-view-button:hover { border-color: var(--accent); color: var(--accent); }
+  /* Docked state, toggled by IntersectionObserver once the footer scrolls into
+     view: switches from tracking the viewport to being anchored inside
+     .content-wrap (bottom:20px from *its* edge, which is the footer's top
+     edge by construction) — so it scrolls with the page from then on, always
+     exactly 20px above the footer regardless of page length. */
+  .switch-view-button.is-docked {
+    position: absolute;
+    bottom: 20px;
+  }
+  .latest-update-label {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.6875rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .glossary-subtitle {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.71875rem;
+    color: var(--muted);
+    margin: 0 0 16px;
+  }
+  .glossary-az {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.71875rem;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+  }
+  .glossary-az .is-active { color: var(--accent); font-weight: 600; }
+  .glossary-letter {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .glossary-term { margin-bottom: 16px; }
+  .glossary-term-name { font-size: 0.875rem; font-weight: 700; color: var(--fg); }
+  .glossary-term-definition {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--muted);
+  }
+  .glossary-term-lesson {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.6875rem;
+    color: var(--accent);
+    margin-top: 3px;
+    text-decoration: none;
+  }
+  .glossary-term-lesson:hover { text-decoration: underline; }
+
+  .explore-page main {
+    max-width: none;
+    width: 100%;
+    padding: 1.25rem 2rem 1.5rem;
+  }
+
+</style>
+</head>
+<body class="explore-page">
+<header class="site-header">
+  <a class="brand" href="index.html">News → Lessons</a>
+  <nav class="site-nav">
+    <div class="site-nav-dropdown">
+      <a href="explore.html" class="is-active">Explore</a>
+      <div class="site-nav-dropdown-menu">
+        <div class="site-nav-dropdown-menu-box">
+          <a href="explore.html" class="is-active">Map</a>
+          <a href="explore-cards.html" class="">Cards</a>
+        </div>
+      </div>
+    </div>
+    <a href="history.html" class="">History</a>
+    <a href="glossary.html" class="">Glossary</a>
+  </nav>
+</header>
+<div class="content-wrap">
+  <div class="page-shell">
+    
+    <div class="page-main">
+      
+      <main>
+      
+      
+<div class="explore-caption" id="exploreCaption">click a cluster to explore its tags</div>
+<div class="explore-back" id="exploreBack" hidden>
+  <button type="button" id="exploreBackBtn">&lsaquo; Back to clusters</button>
+</div>
+<div class="explore-map" style="height:673px">
+  <div id="exploreRoot" class="explore-map-panel" data-panel="root" style="width:870px;height:673px">
+    <div class="explore-bubble explore-center-root" style="left:385.0px;top:286.5px;width:100px;height:100px">News<br>Lessons</div>
+    
+    <button type="button" class="explore-bubble explore-cluster-bubble" data-cluster="business-and-finance" style="left:379.0px;top:34.1px;width:112px;height:112px">Business &amp; Finance</button>
+    
+    <button type="button" class="explore-bubble explore-cluster-bubble" data-cluster="culture-and-humanities" style="left:551.5px;top:67.1px;width:112px;height:112px">Culture &amp; Humanities</button>
+    
+    <button type="button" class="explore-bubble explore-cluster-bubble" data-cluster="entertainment-and-pop-culture" style="left:677.7px;top:157.3px;width:112px;height:112px">Entertainment &amp; Pop Culture</button>
+    
+    <button type="button" class="explore-bubble explore-cluster-bubble" data-cluster="everyday-life-and-consumer" style="left:723.9px;top:280.5px;width:112px;height:112px">Everyday Life &amp; Consumer</button>
+    
+    <button type="button" class="explore-bubble explore-cluster-bubble" data-cluster="history" style="left:677.7px;top:403.7px;width:112px;height:112px">History</button>
+    
+    <button type="button" class="explore-bubble explore-cluster-bubble" data-cluster="infrastructure-and-movement" style="left:551.5px;top:493.9px;width:112px;height:112px">Infrastructure &amp; Movement</button>
+    
+    <button type="button" class="explore-bubble explore-cluster-bubble" data-cluster="life-health-and-medicine" style="left:379.0px;top:526.9px;width:112px;height:112px">Life, Health &amp; Medicine</button>
+    
+    <button type="button" class="explore-bubble explore-cluster-bubble" data-cluster="natural-and-physical-sciences" style="left:206.5px;top:493.9px;width:112px;height:112px">Natural &amp; Physical Sciences</button>
+    
+    <button type="button" class="explore-bubble explore-cluster-bubble" data-cluster="security-conflict-and-public-safety" style="left:80.3px;top:403.7px;width:112px;height:112px">Security, Conflict &amp; Public Safety</button>
+    
+    <button type="button" class="explore-bubble explore-cluster-bubble" data-cluster="social-sciences-and-governance" style="left:34.1px;top:280.5px;width:112px;height:112px">Social Sciences &amp; Governance</button>
+    
+    <button type="button" class="explore-bubble explore-cluster-bubble" data-cluster="sports-and-recreation" style="left:80.3px;top:157.3px;width:112px;height:112px">Sports &amp; Recreation</button>
+    
+    <button type="button" class="explore-bubble explore-cluster-bubble" data-cluster="technology-and-engineering" style="left:206.5px;top:67.1px;width:112px;height:112px">Technology &amp; Engineering</button>
+    
+  </div>
+  
+  <div id="exploreCluster-business-and-finance" class="explore-map-panel" data-panel="cluster" data-cluster="business-and-finance" hidden style="width:644px;height:514px">
+    <div class="explore-bubble explore-center-cluster" style="left:251.0px;top:186.0px;width:142px;height:142px">Business &amp; Finance</div>
+    
+    <a class="explore-bubble explore-tag-bubble" href="business-and-finance/business-strategy-management.html?from=explore-map" style="left:261.0px;top:34.0px;width:122px;height:122px;font-size:13px">Business Strategy · Management</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="business-and-finance/corporate-governance.html?from=explore-map" style="left:487.8px;top:196.0px;width:122px;height:122px;font-size:13px">Corporate Governance</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="business-and-finance/finance-markets.html?from=explore-map" style="left:261.0px;top:358.0px;width:122px;height:122px;font-size:13px">Finance · Markets</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="business-and-finance/trade-and-global-supply-chains.html?from=explore-map" style="left:34.2px;top:196.0px;width:122px;height:122px;font-size:13px">Trade &amp; Global Supply Chains</a>
+    
+  </div>
+  
+  <div id="exploreCluster-culture-and-humanities" class="explore-map-panel" data-panel="cluster" data-cluster="culture-and-humanities" hidden style="width:646px;height:511px">
+    <div class="explore-bubble explore-center-cluster" style="left:252.0px;top:184.5px;width:142px;height:142px">Culture &amp; Humanities</div>
+    
+    <a class="explore-bubble explore-tag-bubble" href="culture-and-humanities/art-art-history.html?from=explore-map" style="left:270.0px;top:34.0px;width:106px;height:106px;font-size:12px">Art · Art History</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="culture-and-humanities/bioethics.html?from=explore-map" style="left:436.8px;top:83.4px;width:106px;height:106px;font-size:12px">Bioethics</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="culture-and-humanities/culture-cultural-studies.html?from=explore-map" style="left:505.9px;top:202.5px;width:106px;height:106px;font-size:12px">Culture · Cultural Studies</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="culture-and-humanities/linguistics.html?from=explore-map" style="left:436.8px;top:321.6px;width:106px;height:106px;font-size:12px">Linguistics</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="culture-and-humanities/literature.html?from=explore-map" style="left:270.0px;top:371.0px;width:106px;height:106px;font-size:12px">Literature</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="culture-and-humanities/media-studies-journalism.html?from=explore-map" style="left:103.2px;top:321.6px;width:106px;height:106px;font-size:12px">Media Studies · Journalism</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="culture-and-humanities/philosophy-ethics.html?from=explore-map" style="left:34.1px;top:202.5px;width:106px;height:106px;font-size:12px">Philosophy · Ethics</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="culture-and-humanities/religion-theology.html?from=explore-map" style="left:103.2px;top:83.4px;width:106px;height:106px;font-size:12px">Religion · Theology</a>
+    
+  </div>
+  
+  <div id="exploreCluster-entertainment-and-pop-culture" class="explore-map-panel" data-panel="cluster" data-cluster="entertainment-and-pop-culture" hidden style="width:644px;height:514px">
+    <div class="explore-bubble explore-center-cluster" style="left:251.0px;top:186.0px;width:142px;height:142px">Entertainment &amp; Pop Culture</div>
+    
+    <a class="explore-bubble explore-tag-bubble" href="entertainment-and-pop-culture/celebrity-culture-fame-studies.html?from=explore-map" style="left:261.0px;top:34.0px;width:122px;height:122px;font-size:13px">Celebrity Culture · Fame Studies</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="entertainment-and-pop-culture/fashion.html?from=explore-map" style="left:476.7px;top:145.9px;width:122px;height:122px;font-size:13px">Fashion</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="entertainment-and-pop-culture/film-tv-streaming-industry.html?from=explore-map" style="left:394.3px;top:327.1px;width:122px;height:122px;font-size:13px">Film · TV · Streaming Industry</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="entertainment-and-pop-culture/gaming-esports.html?from=explore-map" style="left:127.7px;top:327.1px;width:122px;height:122px;font-size:13px">Gaming · Esports</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="entertainment-and-pop-culture/music-industry.html?from=explore-map" style="left:45.3px;top:145.9px;width:122px;height:122px;font-size:13px">Music Industry</a>
+    
+  </div>
+  
+  <div id="exploreCluster-everyday-life-and-consumer" class="explore-map-panel" data-panel="cluster" data-cluster="everyday-life-and-consumer" hidden style="width:644px;height:514px">
+    <div class="explore-bubble explore-center-cluster" style="left:251.0px;top:186.0px;width:142px;height:142px">Everyday Life &amp; Consumer</div>
+    
+    <a class="explore-bubble explore-tag-bubble" href="everyday-life-and-consumer/consumer-affairs-product-safety.html?from=explore-map" style="left:261.0px;top:34.0px;width:122px;height:122px;font-size:13px">Consumer Affairs · Product Safety</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="everyday-life-and-consumer/family-and-relationships-human-interest.html?from=explore-map" style="left:476.7px;top:145.9px;width:122px;height:122px;font-size:13px">Family &amp; Relationships · Human Interest</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="everyday-life-and-consumer/food-and-culinary-science.html?from=explore-map" style="left:394.3px;top:327.1px;width:122px;height:122px;font-size:13px">Food &amp; Culinary Science</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="everyday-life-and-consumer/personal-finance.html?from=explore-map" style="left:127.7px;top:327.1px;width:122px;height:122px;font-size:13px">Personal Finance</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="everyday-life-and-consumer/real-estate-housing-markets.html?from=explore-map" style="left:45.3px;top:145.9px;width:122px;height:122px;font-size:13px">Real Estate · Housing Markets</a>
+    
+  </div>
+  
+  <div id="exploreCluster-history" class="explore-map-panel" data-panel="cluster" data-cluster="history" hidden style="width:644px;height:514px">
+    <div class="explore-bubble explore-center-cluster" style="left:251.0px;top:186.0px;width:142px;height:142px">History</div>
+    
+    <a class="explore-bubble explore-tag-bubble" href="history/constitutional-legal-history.html?from=explore-map" style="left:261.0px;top:34.0px;width:122px;height:122px;font-size:13px">Constitutional · Legal History</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="history/economic-history.html?from=explore-map" style="left:476.7px;top:145.9px;width:122px;height:122px;font-size:13px">Economic History</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="history/military-history.html?from=explore-map" style="left:394.3px;top:327.1px;width:122px;height:122px;font-size:13px">Military History</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="history/social-cultural-history.html?from=explore-map" style="left:127.7px;top:327.1px;width:122px;height:122px;font-size:13px">Social · Cultural History</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="history/world-history.html?from=explore-map" style="left:45.3px;top:145.9px;width:122px;height:122px;font-size:13px">World History</a>
+    
+  </div>
+  
+  <div id="exploreCluster-infrastructure-and-movement" class="explore-map-panel" data-panel="cluster" data-cluster="infrastructure-and-movement" hidden style="width:644px;height:514px">
+    <div class="explore-bubble explore-center-cluster" style="left:251.0px;top:186.0px;width:142px;height:142px">Infrastructure &amp; Movement</div>
+    
+    <a class="explore-bubble explore-tag-bubble" href="infrastructure-and-movement/agriculture-food-systems.html?from=explore-map" style="left:261.0px;top:34.0px;width:122px;height:122px;font-size:13px">Agriculture · Food Systems</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="infrastructure-and-movement/labor-economics-workplace-trends.html?from=explore-map" style="left:487.8px;top:196.0px;width:122px;height:122px;font-size:13px">Labor Economics · Workplace Trends</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="infrastructure-and-movement/transportation-systems.html?from=explore-map" style="left:261.0px;top:358.0px;width:122px;height:122px;font-size:13px">Transportation Systems</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="infrastructure-and-movement/urban-planning.html?from=explore-map" style="left:34.2px;top:196.0px;width:122px;height:122px;font-size:13px">Urban Planning</a>
+    
+  </div>
+  
+  <div id="exploreCluster-life-health-and-medicine" class="explore-map-panel" data-panel="cluster" data-cluster="life-health-and-medicine" hidden style="width:644px;height:514px">
+    <div class="explore-bubble explore-center-cluster" style="left:251.0px;top:186.0px;width:142px;height:142px">Life, Health &amp; Medicine</div>
+    
+    <a class="explore-bubble explore-tag-bubble" href="life-health-and-medicine/medicine-clinical-science.html?from=explore-map" style="left:261.0px;top:34.0px;width:122px;height:122px;font-size:13px">Medicine · Clinical Science</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="life-health-and-medicine/nutrition.html?from=explore-map" style="left:487.8px;top:196.0px;width:122px;height:122px;font-size:13px">Nutrition</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="life-health-and-medicine/psychology-neuroscience.html?from=explore-map" style="left:261.0px;top:358.0px;width:122px;height:122px;font-size:13px">Psychology · Neuroscience</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="life-health-and-medicine/public-health-epidemiology.html?from=explore-map" style="left:34.2px;top:196.0px;width:122px;height:122px;font-size:13px">Public Health · Epidemiology</a>
+    
+  </div>
+  
+  <div id="exploreCluster-natural-and-physical-sciences" class="explore-map-panel" data-panel="cluster" data-cluster="natural-and-physical-sciences" hidden style="width:666px;height:520px">
+    <div class="explore-bubble explore-center-cluster" style="left:262.0px;top:189.0px;width:142px;height:142px">Natural &amp; Physical Sciences</div>
+    
+    <a class="explore-bubble explore-tag-bubble" href="natural-and-physical-sciences/astronomy-astrophysics.html?from=explore-map" style="left:290.0px;top:34.4px;width:86px;height:86px;font-size:12px">Astronomy · Astrophysics</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="natural-and-physical-sciences/biology.html?from=explore-map" style="left:428.2px;top:63.4px;width:86px;height:86px;font-size:12px">Biology</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="natural-and-physical-sciences/chemistry.html?from=explore-map" style="left:522.6px;top:141.1px;width:86px;height:86px;font-size:12px">Chemistry</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="natural-and-physical-sciences/climate-science-environmental-science.html?from=explore-map" style="left:543.1px;top:243.0px;width:86px;height:86px;font-size:12px">Climate Science · Environmental Science</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="natural-and-physical-sciences/earth-science-geology.html?from=explore-map" style="left:483.2px;top:336.6px;width:86px;height:86px;font-size:12px">Earth Science · Geology</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="natural-and-physical-sciences/ecology.html?from=explore-map" style="left:362.0px;top:392.2px;width:86px;height:86px;font-size:12px">Ecology</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="natural-and-physical-sciences/geography-physical-and-human.html?from=explore-map" style="left:218.0px;top:392.2px;width:86px;height:86px;font-size:12px">Geography (Physical &amp; Human)</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="natural-and-physical-sciences/mathematics.html?from=explore-map" style="left:96.8px;top:336.6px;width:86px;height:86px;font-size:12px">Mathematics</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="natural-and-physical-sciences/physics.html?from=explore-map" style="left:36.9px;top:243.0px;width:86px;height:86px;font-size:12px">Physics</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="natural-and-physical-sciences/planetary-science.html?from=explore-map" style="left:57.4px;top:141.1px;width:86px;height:86px;font-size:12px">Planetary Science</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="natural-and-physical-sciences/wildlife-conservation-biology.html?from=explore-map" style="left:151.8px;top:63.4px;width:86px;height:86px;font-size:12px">Wildlife · Conservation Biology</a>
+    
+  </div>
+  
+  <div id="exploreCluster-security-conflict-and-public-safety" class="explore-map-panel" data-panel="cluster" data-cluster="security-conflict-and-public-safety" hidden style="width:606px;height:482px">
+    <div class="explore-bubble explore-center-cluster" style="left:232.0px;top:170.0px;width:142px;height:142px">Security, Conflict &amp; Public Safety</div>
+    
+    <a class="explore-bubble explore-tag-bubble" href="security-conflict-and-public-safety/criminal-justice-policing.html?from=explore-map" style="left:250.0px;top:34.0px;width:106px;height:106px;font-size:12px">Criminal Justice · Policing</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="security-conflict-and-public-safety/emergency-management-disaster-response.html?from=explore-map" style="left:436.7px;top:111.0px;width:106px;height:106px;font-size:12px">Emergency Management · Disaster Response</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="security-conflict-and-public-safety/human-rights.html?from=explore-map" style="left:436.7px;top:265.0px;width:106px;height:106px;font-size:12px">Human Rights</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="security-conflict-and-public-safety/immigration-and-migration-studies.html?from=explore-map" style="left:250.0px;top:342.0px;width:106px;height:106px;font-size:12px">Immigration &amp; Migration Studies</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="security-conflict-and-public-safety/terrorism-extremism-studies.html?from=explore-map" style="left:63.3px;top:265.0px;width:106px;height:106px;font-size:12px">Terrorism · Extremism Studies</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="security-conflict-and-public-safety/war-armed-conflict-studies.html?from=explore-map" style="left:63.3px;top:111.0px;width:106px;height:106px;font-size:12px">War · Armed Conflict Studies</a>
+    
+  </div>
+  
+  <div id="exploreCluster-social-sciences-and-governance" class="explore-map-panel" data-panel="cluster" data-cluster="social-sciences-and-governance" hidden style="width:591px;height:466px">
+    <div class="explore-bubble explore-center-cluster" style="left:224.5px;top:162.0px;width:142px;height:142px">Social Sciences &amp; Governance</div>
+    
+    <a class="explore-bubble explore-tag-bubble" href="social-sciences-and-governance/demography.html?from=explore-map" style="left:252.5px;top:34.3px;width:86px;height:86px;font-size:12px">Demography</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="social-sciences-and-governance/diplomacy.html?from=explore-map" style="left:392.6px;top:70.7px;width:86px;height:86px;font-size:12px">Diplomacy</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="social-sciences-and-governance/economics-macro-micro.html?from=explore-map" style="left:467.2px;top:163.0px;width:86px;height:86px;font-size:12px">Economics (Macro · Micro)</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="social-sciences-and-governance/education-systems.html?from=explore-map" style="left:441.3px;top:267.9px;width:86px;height:86px;font-size:12px">Education Systems</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="social-sciences-and-governance/geopolitics-international-relations.html?from=explore-map" style="left:327.1px;top:336.3px;width:86px;height:86px;font-size:12px">Geopolitics · International Relations</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="social-sciences-and-governance/law-legal-systems.html?from=explore-map" style="left:177.9px;top:336.3px;width:86px;height:86px;font-size:12px">Law · Legal Systems</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="social-sciences-and-governance/politics-political-science.html?from=explore-map" style="left:63.7px;top:267.9px;width:86px;height:86px;font-size:12px">Politics · Political Science</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="social-sciences-and-governance/public-policy-and-governance.html?from=explore-map" style="left:37.8px;top:163.0px;width:86px;height:86px;font-size:12px">Public Policy &amp; Governance</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="social-sciences-and-governance/sociology-anthropology.html?from=explore-map" style="left:112.4px;top:70.7px;width:86px;height:86px;font-size:12px">Sociology · Anthropology</a>
+    
+  </div>
+  
+  <div id="exploreCluster-sports-and-recreation" class="explore-map-panel" data-panel="cluster" data-cluster="sports-and-recreation" hidden style="width:644px;height:514px">
+    <div class="explore-bubble explore-center-cluster" style="left:251.0px;top:186.0px;width:142px;height:142px">Sports &amp; Recreation</div>
+    
+    <a class="explore-bubble explore-tag-bubble" href="sports-and-recreation/sports-business-sports-economics.html?from=explore-map" style="left:261.0px;top:34.0px;width:122px;height:122px;font-size:13px">Sports Business · Sports Economics</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="sports-and-recreation/sports-history.html?from=explore-map" style="left:457.4px;top:277.0px;width:122px;height:122px;font-size:13px">Sports History</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="sports-and-recreation/sports-science-kinesiology.html?from=explore-map" style="left:64.6px;top:277.0px;width:122px;height:122px;font-size:13px">Sports Science · Kinesiology</a>
+    
+  </div>
+  
+  <div id="exploreCluster-technology-and-engineering" class="explore-map-panel" data-panel="cluster" data-cluster="technology-and-engineering" hidden style="width:646px;height:511px">
+    <div class="explore-bubble explore-center-cluster" style="left:252.0px;top:184.5px;width:142px;height:142px">Technology &amp; Engineering</div>
+    
+    <a class="explore-bubble explore-tag-bubble" href="technology-and-engineering/artificial-intelligence-machine-learning.html?from=explore-map" style="left:270.0px;top:34.0px;width:106px;height:106px;font-size:12px">Artificial Intelligence · Machine Learning</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="technology-and-engineering/computer-science-software.html?from=explore-map" style="left:436.8px;top:83.4px;width:106px;height:106px;font-size:12px">Computer Science · Software</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="technology-and-engineering/cybersecurity.html?from=explore-map" style="left:505.9px;top:202.5px;width:106px;height:106px;font-size:12px">Cybersecurity</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="technology-and-engineering/energy-systems.html?from=explore-map" style="left:436.8px;top:321.6px;width:106px;height:106px;font-size:12px">Energy Systems</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="technology-and-engineering/engineering.html?from=explore-map" style="left:270.0px;top:371.0px;width:106px;height:106px;font-size:12px">Engineering</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="technology-and-engineering/industrial-manufacturing-systems.html?from=explore-map" style="left:103.2px;top:321.6px;width:106px;height:106px;font-size:12px">Industrial · Manufacturing Systems</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="technology-and-engineering/materials-science.html?from=explore-map" style="left:34.1px;top:202.5px;width:106px;height:106px;font-size:12px">Materials Science</a>
+    
+    <a class="explore-bubble explore-tag-bubble" href="technology-and-engineering/space-exploration-spaceflight.html?from=explore-map" style="left:103.2px;top:83.4px;width:106px;height:106px;font-size:12px">Space Exploration · Spaceflight</a>
+    
+  </div>
+  
+</div>
+
+      </main>
+    </div>
+  </div>
+  
+<a class="switch-view-button" id="switchViewBtn" href="explore-cards.html">Switch to Cards</a>
+
+</div>
+<footer class="site-footer">
+  Generated from the News → Lessons library. Not affiliated with any linked publisher.
+</footer>
+<script>
+(function () {
+  var btn = document.querySelector('.switch-view-button');
+  var footer = document.querySelector('footer.site-footer');
+  if (!btn || !footer || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    btn.classList.toggle('is-docked', entries[0].isIntersecting);
+  }).observe(footer);
+})();
+(function () {
+  // Measured, not guessed — the sidebar's sticky "top" offset has to match
+  // the header's real rendered height exactly, or it either gaps below the
+  // header or hides underneath it.
+  var header = document.querySelector('header.site-header');
+  if (!header) return;
+  function setHeaderHeight() {
+    document.documentElement.style.setProperty('--header-height', header.offsetHeight + 'px');
+  }
+  setHeaderHeight();
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(setHeaderHeight).observe(header);
+  } else {
+    window.addEventListener('resize', setHeaderHeight);
+  }
+})();
+</script>
+
+<script>
+(function () {
+  var caption = document.getElementById('exploreCaption');
+  var backWrap = document.getElementById('exploreBack');
+  var backBtn = document.getElementById('exploreBackBtn');
+  var root = document.getElementById('exploreRoot');
+  var clusterPanels = Array.prototype.slice.call(document.querySelectorAll('.explore-map-panel[data-panel="cluster"]'));
+  var busy = false;
+  var switchBtn = document.getElementById('switchViewBtn');
+
+  function panelFor(slug) {
+    for (var i = 0; i < clusterPanels.length; i++) {
+      if (clusterPanels[i].dataset.cluster === slug) return clusterPanels[i];
+    }
+    return null;
+  }
+
+  // Keeps "Switch to Cards" pointed at the Cards equivalent of whatever this
+  // page is currently showing, so switching views preserves cluster context
+  // instead of always dropping back to Cards' root grid.
+  function updateSwitchButton(clusterSlug) {
+    switchBtn.href = clusterSlug ? clusterSlug + '/index.html' : 'explore-cards.html';
+  }
+
+  // Arriving via a tag page's "Back to Explore" link (href "explore.html#<cluster-slug>")
+  // lands directly on that cluster's drilled bubble view, no click needed to get there.
+  if (location.hash) {
+    var initialSlug = decodeURIComponent(location.hash.slice(1));
+    var initial = panelFor(initialSlug);
+    if (initial) {
+      root.hidden = true;
+      initial.hidden = false;
+      caption.hidden = true;
+      backWrap.hidden = false;
+      updateSwitchButton(initialSlug);
+    }
+  }
+
+  function swap(fromEl, toEl, onSwap) {
+    busy = true;
+    fromEl.classList.add('explore-anim-out');
+    setTimeout(function () {
+      fromEl.hidden = true;
+      fromEl.classList.remove('explore-anim-out');
+      onSwap();
+      toEl.hidden = false;
+      toEl.classList.add('explore-anim-in-start');
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          toEl.classList.remove('explore-anim-in-start');
+          toEl.classList.add('explore-anim-in');
+          setTimeout(function () {
+            toEl.classList.remove('explore-anim-in');
+            busy = false;
+          }, 200);
+        });
+      });
+    }, 200);
+  }
+
+  root.addEventListener('click', function (e) {
+    var b = e.target.closest('.explore-cluster-bubble');
+    if (!b || busy) return;
+    var target = panelFor(b.dataset.cluster);
+    if (!target) return;
+    swap(root, target, function () {
+      caption.hidden = true;
+      backWrap.hidden = false;
+      updateSwitchButton(b.dataset.cluster);
+    });
+  });
+
+  backBtn.addEventListener('click', function () {
+    if (busy) return;
+    var current = document.querySelector('.explore-map-panel[data-panel="cluster"]:not([hidden])');
+    if (!current) return;
+    swap(current, root, function () {
+      backWrap.hidden = true;
+      caption.hidden = false;
+      updateSwitchButton(null);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
