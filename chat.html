@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Social Sciences &amp; Governance — News → Lessons</title>
+<title>Chat — News → Lessons</title>
 <style>
   :root {
     --bg: #fbfaf7;
@@ -760,24 +760,60 @@
   }
   .glossary-term-lesson:hover { text-decoration: underline; }
 
+  .chat-page main {
+    max-width: 760px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    /* Fills exactly the space between the sticky header and the fixed-height
+       footer, so the thread scrolls internally and the input bar stays put
+       at the bottom of that space — not pinned to the viewport, which would
+       otherwise sit on top of the footer. --header-height is JS-measured
+       (see the shared script near the end of base.html's body); --footer-height
+       is a fixed constant, both already defined once in :root. */
+    height: calc(100vh - var(--header-height, 58px) - var(--footer-height));
+  }
+  .chat-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.25rem;
+  }
+  .chat-page-header h1 {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+  .chat-page .chat-reset-btn {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  .chat-page .chat-thread { padding: 1rem 0; }
+  .chat-page .chat-input-bar { padding: 0.85rem 0; }
+  .chat-page .chat-empty-state { font-size: 0.9rem; }
+
 </style>
 </head>
-<body class="">
+<body class="chat-page">
 <header class="site-header">
-  <a class="brand" href="../index.html">News → Lessons</a>
+  <a class="brand" href="index.html">News → Lessons</a>
   <nav class="site-nav">
     <div class="site-nav-dropdown">
-      <a href="../explore.html" class="is-active">Explore</a>
+      <a href="explore.html" class="">Explore</a>
       <div class="site-nav-dropdown-menu">
         <div class="site-nav-dropdown-menu-box">
-          <a href="../explore.html" class="">Map</a>
-          <a href="../explore-cards.html" class="is-active">Cards</a>
+          <a href="explore.html" class="">Map</a>
+          <a href="explore-cards.html" class="">Cards</a>
         </div>
       </div>
     </div>
-    <a href="../history.html" class="">History</a>
-    <a href="../glossary.html" class="">Glossary</a>
-    <a href="../chat.html" class="">Chat</a>
+    <a href="history.html" class="">History</a>
+    <a href="glossary.html" class="">Glossary</a>
+    <a href="chat.html" class="is-active">Chat</a>
   </nav>
 </header>
 <div class="content-wrap">
@@ -785,108 +821,23 @@
     
     <div class="page-main">
       
-<nav class="breadcrumb"><a href="../explore-cards.html">Explore</a> / Social Sciences &amp; Governance</nav>
-
       <main>
       
-<a class="back-button" href="../explore-cards.html">&larr; Back to Explore (Cards)</a>
-
       
-<h1>Social Sciences &amp; Governance</h1>
-
-<ul class="grid">
-
-  <li>
-    <a class="card" href="demography.html?from=explore-cards">
-      <div class="card-title">Demography</div>
-      <div class="card-meta">no lessons yet</div>
-    </a>
-  </li>
-
-  <li>
-    <a class="card" href="diplomacy.html?from=explore-cards">
-      <div class="card-title">Diplomacy</div>
-      <div class="card-meta">1 stub</div>
-    </a>
-  </li>
-
-  <li>
-    <a class="card" href="economics-macro-micro.html?from=explore-cards">
-      <div class="card-title">Economics (Macro · Micro)</div>
-      <div class="card-meta">2 lessons and 2 stubs</div>
-    </a>
-  </li>
-
-  <li>
-    <a class="card" href="education-systems.html?from=explore-cards">
-      <div class="card-title">Education Systems</div>
-      <div class="card-meta">no lessons yet</div>
-    </a>
-  </li>
-
-  <li>
-    <a class="card" href="geopolitics-international-relations.html?from=explore-cards">
-      <div class="card-title">Geopolitics · International Relations</div>
-      <div class="card-meta">1 lesson and 6 stubs</div>
-    </a>
-  </li>
-
-  <li>
-    <a class="card" href="law-legal-systems.html?from=explore-cards">
-      <div class="card-title">Law · Legal Systems</div>
-      <div class="card-meta">2 stubs</div>
-    </a>
-  </li>
-
-  <li>
-    <a class="card" href="politics-political-science.html?from=explore-cards">
-      <div class="card-title">Politics · Political Science</div>
-      <div class="card-meta">8 lessons and 1 stub</div>
-    </a>
-  </li>
-
-  <li>
-    <a class="card" href="public-policy-and-governance.html?from=explore-cards">
-      <div class="card-title">Public Policy &amp; Governance</div>
-      <div class="card-meta">1 lesson and 4 stubs</div>
-    </a>
-  </li>
-
-  <li>
-    <a class="card" href="sociology-anthropology.html?from=explore-cards">
-      <div class="card-title">Sociology · Anthropology</div>
-      <div class="card-meta">1 stub</div>
-    </a>
-  </li>
-
-</ul>
-
+<div class="chat-page-header">
+  <h1>Chat</h1>
+  <button type="button" id="chatResetBtn" class="chat-reset-btn" title="New chat" aria-label="Start a new chat">↺ New chat</button>
+</div>
+<div class="chat-thread" id="chatThread">
+  <div class="chat-empty-state">Ask a question about anything in the News → Lessons library.</div>
+</div>
+<form class="chat-input-bar" id="chatForm">
+  <textarea id="chatInput" rows="1" placeholder="Ask a question…" aria-label="Chat message"></textarea>
+  <button type="submit" class="chat-send-btn" aria-label="Send message">➤</button>
+</form>
 
       </main>
     </div>
-  </div>
-  
-  <div class="floating-action-row">
-    
-<a class="switch-view-button" href="../explore.html#social-sciences-and-governance">Switch to Map</a>
-
-    <button type="button" class="chat-launcher" id="chatLauncherBtn" aria-label="Open chat" aria-expanded="false" aria-controls="chatPanel">💬</button>
-  </div>
-  <div class="chat-panel" id="chatPanel" hidden>
-    <div class="chat-panel-header">
-      <span>News → Lessons Chat</span>
-      <div class="chat-panel-header-actions">
-        <button type="button" id="chatResetBtn" class="chat-reset-btn" title="New chat" aria-label="Start a new chat">↺</button>
-        <button type="button" id="chatPanelClose" class="chat-panel-close" aria-label="Close chat">✕</button>
-      </div>
-    </div>
-    <div class="chat-thread" id="chatThread">
-      <div class="chat-empty-state">Ask a question about anything in the library.</div>
-    </div>
-    <form class="chat-input-bar" id="chatForm">
-      <textarea id="chatInput" rows="1" placeholder="Ask a question…" aria-label="Chat message"></textarea>
-      <button type="submit" class="chat-send-btn" aria-label="Send message">➤</button>
-    </form>
   </div>
   
 </div>
